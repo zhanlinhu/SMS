@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sms.dao.MajorDao">
+  <resultMap id="majorMap" type="com.sms.entity.Major">
+      <id column="id" property="id" />
+      <result column="major_num" property="majorNum"/>
+      <result column="name" property="name" />
+      <result column="synopsis" property="synopsis" />
+      <result column="college_id" property="collegeId"/>
+  </resultMap>
+    <resultMap id="cascaderDtoMap" type="com.sms.dto.CascaderDto">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+        <result column="college_id" property="collegeId"/>
+        <result column="major_num" property="majorNum"/>
+    </resultMap>
+    <resultMap id="majorDtoMap" type="com.sms.dto.MajorDto">
+        <id column="id" property="id" />
+        <result column="major_num" property="majorNum"/>
+        <result column="name" property="name" />
+        <result column="synopsis" property="synopsis" />
+        <result column="collegeName" property="collegeName"/>
+        <result column="collegeId" property="collegeId"/>
+    </resultMap>
+  <sql id="Base_Column_List">
+    id, major_num, name, synopsis, college_id
+  </sql>
+
+    <select id="getCascaderData" resultMap="cascaderDtoMap">
+        select id, major_num, name, college_id from t_major
+    </select>
+
+  <select id="getMajorForSelect" resultMap="majorMap">
+  	select id,name from t_major
+  	<where>
+  		<if test="_parameter != null and _parameter != ''">
+    		name like CONCAT ('%',#{searchKey},'%')
+  		</if>
+  	</where>
+  	limit 0, 10
+  </select>
+  <select id="getMajor" resultMap="majorDtoMap">
+  	select M.id, major_num, M.name, M.synopsis, c.name as collegeName, c.id as collegeId
+  	from t_major as M, t_college as C
+  	<where>
+  	    M.college_id = C.id
+  		<if test="param2 != null and param2 != ''">
+            (major_num like CONCAT ('%',#{param2},'%'))
+            or (M.name like CONCAT ('%',#{param2},'%') )
+            or (c.name like CONCAT ('%',#{param2},'%') )
+  		</if>
+  	</where>
+  	<if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  <select id="getTotalItemsCount" resultType="Integer">
+  	select count(*)
+    from t_major as M, t_college as C
+    <where>
+        M.college_id = C.id
+    	<if test="_parameter != null and _parameter != ''">
+            (major_num like CONCAT ('%',#{param2},'%'))
+            or (M.name like CONCAT ('%',#{param2},'%'))
+            or (c.name like CONCAT ('%',#{param2},'%'))
+    	</if>
+    </where>
+  </select>
+
+    <select id="getCount" resultType="Integer">
+        select count(*)
+        from t_major
+        where major_num = #{majorNum} and college_id = ${collegeId}
+    </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="majorMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_major
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_major
+    where id = #{id}
+  </delete>
+  
+  <delete id="deleteInList" >
+  	delete from t_major where id in
+  		<foreach collection="list" item="id" separator="," open="(" close=")">
+  			#{id}
+  		</foreach>
+  </delete>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+  	insert into t_major (major_num, name, synopsis, college_id
+  	) values
+      <foreach collection="list" item="item" separator="," >
+          (#{item.majorNum}, #{item.name}, #{item.synopsis}, #{item.collegeId})
+  	  </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.sms.entity.Major">
+    insert into t_major (id, major_num, name, synopsis, college_id)
+    values (#{id}, #{majorNum}), #{name}, #{synopsis}, #{collegeId})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.sms.entity.Major">
+    insert into t_major
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            id,
+        </if>
+        <if test="majorNum != null">
+            major_num,
+        </if>
+        <if test="name != null">
+            name,
+        </if>
+        <if test="synopsis != null">
+            synopsis,
+        </if>
+        <if test="collegeId != null">
+            college_id
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            #{id},
+        </if>
+        <if test="majorNum != null">
+            #{majorNum},
+        </if>
+        <if test="name != null">
+            #{name},
+        </if>
+        <if test="synopsis != null">
+            #{synopsis},
+        </if>
+        <if test="collegeId != null">
+            #{collegeId}
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sms.entity.Major">
+    update t_major
+    <set>
+        <if test="majorNum != null">
+            major_num = #{majorNum},
+        </if>
+        <if test="name != null">
+            name = #{name},
+        </if>
+        <if test="synopsis != null">
+            synopsis = #{synopsis},
+        </if>
+        <if test="collegeId != null">
+            college_id = #{collegeId}
+        </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sms.entity.Major">
+    update t_major
+    set major_num = #{majorNum}, name = #{name}, synopsis = #{synopsis}, college_id = #{collegeId}
+    where id = #{id}
+  </update>
+</mapper>

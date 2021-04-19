@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.3.xsd">
+	<!-- 读取db.properties -->
+	<context:property-placeholder location="classpath:db.properties"/>
+	
+	<!-- 配置数据源 -->
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource">
+		
+		<property name="driverClassName" value="${jdbc.driver}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		
+		<property name="maxActive" value="${jdbc.maxActive}" />
+		<property name="maxIdle" value="${jdbc.maxIdle}" />
+		<property name="initialSize" value="${jdbc.initialSize}" />
+		<property name="minIdle" value="${jdbc.minIdle}" />
+		<property name="timeBetweenEvictionRunsMillis" value="${jdbc.timeBetweenEvictionRunsMillis}" />
+		<property name="minEvictableIdleTimeMillis" value="${jdbc.minEvictableIdleTimeMillis}" />
+	
+	</bean>
+	
+	<!-- 事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	
+	<!-- 通知 -->
+	<!--<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		&lt;!&ndash; 传播行为 &ndash;&gt;
+		<tx:attributes>
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			
+			<tx:method name="delete*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			
+			<tx:method name="find*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="select*" propagation="SUPPORTS" read-only="true" />
+			<tx:method name="get*" propagation="SUPPORTS" read-only="true" />
+		</tx:attributes>
+	</tx:advice>-->
+	
+	<!-- 切面 -->
+	<!--<aop:config>
+		<aop:advisor advice-ref="txAdvice" pointcut="execution(* com.sms.service.*.*(..))" />
+	</aop:config>-->
+
+	<!--SqlSessionFactoryBean创建SqlSessionFactory-->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:mybatis-config.xml" />
+	</bean>
+	<!-- 扫描dao接口 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+		<property name="basePackage" value="com.sms.dao"/>
+	</bean>
+	
+	<!-- 扫描@Service注解 -->
+	<context:component-scan base-package="com.sms.service" />
+	<!--定时任务相关-->
+	<context:component-scan base-package="com.sms.quartz" />
+
+	<!-- job -->
+	<bean id="publicWebServiceJob" class="com.sms.quartz.LoadDataJob"/>
+
+	<bean id="publicWebServiceJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="publicWebServiceJob"/>
+		<property name="targetMethod" value="load"></property>
+		<!--默认允许并发执行，设置为false 防止并发执行 发生死锁问题 -->
+		<property name="concurrent" value="false"/>
+
+	</bean>
+
+
+
+	<!-- quartz一分钟执行一次的实现方式 -->
+	<!-- <bean id="publicWebServiceTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="publicWebServiceJobDetail"></property>
+        <property name="cronExpression" value="0 */1 * * * ?"></property>
+        <property name="description" value="定时"></property>
+    </bean>-->
+
+
+	<!-- quartz实例化5秒后执行一次job的方式 -->
+	<bean id="publicWebServiceTriggerBean" class="org.springframework.scheduling.quartz.SimpleTriggerFactoryBean">
+		<property name="jobDetail" ref="publicWebServiceJobDetail" />
+		<property name="startDelay" value="100" /> <!-- 启动延迟  单位/毫秒-->
+
+		<property name="repeatCount" value="0" />  <!--  重复次数  -->
+	</bean>
+
+	<!-- 触发器-->
+	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+<!--		<property name="jobFactory" ref="jobFactory"/>-->
+		<property name="triggers">
+			<list>
+				<ref bean="publicWebServiceTriggerBean"/>
+			</list>
+		</property>
+	</bean>
+
+	
+</beans>
+                        

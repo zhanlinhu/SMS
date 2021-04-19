@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sms.dao.ScoreDao">
+  <resultMap id="BaseResultMapScore" type="com.sms.entity.Score">
+    <id column="id" property="id" />
+    <result column="score" property="score" />
+    <result column="result" property="result" />
+    <result column="c_id" property="baseCourseId" />
+    <result column="s_id" property="sId" />
+  </resultMap>
+  
+  <resultMap id="BaseResultMap" type="com.sms.dto.CourseDto">
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="courseName" property="courseName" />
+    <result column="teacherName" property="teacherName" />
+    <result column="test_mode" property="testMode" />
+    <result column="score" property="score" />
+    <result column="result" property="result" />
+  </resultMap>
+  
+  
+  <resultMap id="ResultMap" type="com.sms.dto.ScoreVo">
+    <result column="start_date" jdbcType="DATE" property="startDate" />
+    <result column="stuId" property="stuId" />
+    <result column="stuName" property="stuName" />
+    <result column="majorName" property="majorName" />
+    <result column="grade" property="grade" />
+    <result column="courseName" property="courseName" />
+    <result column="teacherName" property="teacherName" />
+    <result column="test_mode" property="testMode" />
+    <result column="score" property="score" />
+    <result column="result" property="result" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    id, score, result, c_id, s_id
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMapScore">
+    select 
+    <include refid="Base_Column_List" />
+    from t_score
+    where id = #{id}
+  </select>
+  
+  <!-- 成绩报表 start-->
+  <select id="getTotalItemsCountForExport" parameterType="com.sms.dto.ScoreVo"  resultType="java.lang.Integer">
+    select count(*)
+    from t_score as Sc, t_course as C, t_student as Stu, t_base_course as Bc, t_teacher as T, t_major as M
+    where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Bc.major_id = M.id
+    and C.t_id = T.id and C.complete = 1
+   	<if test="startDate != null and startDate != '' ">
+    	and C.start_date >= #{startDate}
+    </if>
+    <if test="endDate != null and endDate != '' ">
+    	and C.start_date &lt;= #{endDate}
+    </if>
+   	<if test="isPass == 1">
+    	and (score >= 60 or result = 1)
+    </if>
+    <if test="isPass == 2">
+    	and (60 > score or result = 0)
+    </if>
+    <if test="searchKey != null and searchKey != '' ">
+    	and (
+			Stu.major like CONCAT('%', #{searchKey}, '%')
+			or Stu.grade like CONCAT('%', #{searchKey}, '%')
+			
+			or Bc.name like CONCAT('%', #{searchKey}, '%')
+		)
+    </if>
+  </select>
+  
+  <select id="getScoreListForExport"  resultMap="ResultMap">
+      select distinct start_date, Stu.id as stuId, Stu.name as stuName, M.name as majorName, grade,
+      Bc.name as courseName, T.name as teacherName, test_mode, score, result
+      from t_score as Sc, t_course as C, t_student as Stu, t_base_course as Bc, t_teacher as T, t_major as M
+      where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Bc.major_id = M.id
+      and C.t_id = T.id and C.complete = 1
+    <if test="param2 != null">
+    	<if test="param2.startDate != null and param2.startDate != '' ">
+	    	and C.start_date >= #{param2.startDate}
+	    </if>
+	    <if test="param2.endDate != null and param2.endDate != '' ">
+	    	and C.start_date &lt;= #{param2.endDate}
+	    </if>
+    	<if test="param2.isPass == 1">
+	    	and (score >= 60 or result = 1)
+	    </if>
+	    <if test="param2.isPass == 2">
+	    	and (60 > score or result = 0)
+	    </if>
+	    <if test="param2.searchKey != null and param2.searchKey != '' ">
+	    	and (
+				M.name like CONCAT('%', #{param2.searchKey}, '%')
+				or Stu.grade like CONCAT('%', #{param2.searchKey}, '%')
+				or Bc.name like CONCAT('%', #{param2.searchKey}, '%')
+			)
+	    </if>
+    </if>
+    <if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  <!-- 成绩报表end -->
+  
+  <select id="getTotalItemsCount"  resultType="java.lang.Integer">
+    select count(*) from t_score, t_course as C
+    where t_score.c_id = C.id
+    	and C.complete = 1
+    	and s_id = #{param1}
+    <if test="param2 == 1">
+    	and (score >= 60 or result = "通过")
+    </if>
+    <if test="param2 == 0">
+    	and (60 > score or result = "未通过")
+    </if>
+  </select>
+  
+  <select id="getCourseList"  resultMap="BaseResultMap">
+    select start_date, BC.name as courseName, 
+    	T.name as teacherName, test_mode, 
+    	score, result
+    from t_score as S, t_course as C, 
+    	t_teacher as T, t_base_course as BC
+    where S.c_id = C.id and C.base_course_id = BC.id 
+    	and C.t_id = T.id and C.complete = 1
+    	and S.s_id = #{param2}
+    <if test="param3 == 1">
+    	and (score >= 60 or result = "通过")
+    </if>
+    <if test="param3 == 0">
+    	and (60 > score or result = "未通过")
+    </if>
+    <if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_score
+    where id = #{id}
+  </delete>
+  
+  <delete id="delete" parameterType="com.sms.entity.Score">
+    delete from t_score
+    where c_id = #{baseCourseId} and s_id = #{sId}
+  </delete>
+  
+  <insert id="insert" parameterType="com.sms.entity.Score">
+    insert into t_score (id, score, result, 
+      c_id, s_id)
+    values (#{id}, #{score}, #{result},
+      #{baseCourseId}, #{sId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sms.entity.Score">
+    insert into t_score
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="score != null">
+        score,
+      </if>
+      <if test="result != null">
+        result,
+      </if>
+      <if test="baseCourseId != null">
+        c_id,
+      </if>
+      <if test="sId != null">
+        s_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="score != null">
+        #{score},
+      </if>
+      <if test="result != null">
+        #{result},
+      </if>
+      <if test="baseCourseId != null">
+        #{baseCourseId},
+      </if>
+      <if test="sId != null">
+        #{sId},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sms.entity.Score">
+    update t_score
+    <set>
+      <if test="score != null">
+        score = #{score},
+      </if>
+      <if test="result != null">
+        result = #{result},
+      </if>
+      <if test="baseCourseId != null">
+        c_id = #{baseCourseId},
+      </if>
+      <if test="sId != null">
+        s_id = #{sId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sms.entity.Score">
+    update t_score
+    set score = #{score},
+      result = #{result},
+      c_id = #{baseCourseId},
+      s_id = #{sId}
+    where id = #{id}
+  </update>
+  
+  <update id="update" parameterType="java.util.List">
+    update t_score
+    <trim prefix="set" suffixOverrides=",">
+    	<trim prefix="score = case" suffix="end ,">
+    		<foreach collection="list" item="score">
+    			when id = #{score.id} then #{score.score}
+    		</foreach>
+        </trim>
+        <trim prefix="result = case" suffix="end ,">
+    		<foreach collection="list" item="score">
+    			when id = #{score.id} then #{score.result}
+    		</foreach>
+        </trim>
+    </trim>
+    where id in 
+    <foreach collection="list" item="score" separator="," open="(" close=")" >
+    	#{score.id}
+    </foreach>
+  </update>
+</mapper>

@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sms.dao.TeacherDao">
+  <resultMap id="teacherMap" type="com.sms.entity.Teacher">
+    <id column="id" property="id" />
+    <result column="password" property="password" />
+    <result column="name" property="name" />
+      <result column="sex" property="sex" />
+      <result column="synopsis" property="synopsis" />
+      <result column="college_id" property="collegeId" />
+  </resultMap>
+    <resultMap id="teacherDtoMap" type="com.sms.dto.TeacherDto">
+        <id column="id" property="id" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="synopsis" property="synopsis" />
+        <result column="college" property="college" />
+        <result column="collegeId" property="collegeId" />
+    </resultMap>
+  <sql id="baseTeacherSql">
+    id, password, name, sex, synopsis, college_id
+  </sql>
+    <sql id="teacherSql">
+        t.id as id, password, t.name as name, sex, t.synopsis as synopsis, c.name as college, c.id as collegeId
+    </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="teacherMap">
+    select 
+    <include refid="baseTeacherSql" />
+    from t_teacher
+    where id = #{id}
+  </select>
+  
+  <select id="getTeacherForSelect" resultMap="teacherMap">
+  	select distinct T.id,T.name from t_base_course as B, t_major as M, t_teacher as T
+  	<where>
+        B.major_id = M.id and M.college_id = T.college_id
+  		<if test="_parameter != null and _parameter != ''">
+    		and B.name like CONCAT ('%',#{searchKey},'%')
+  		</if>
+  	</where>
+  </select>
+  <select id="getTeacher" resultMap="teacherDtoMap">
+  	select
+  	<include refid="teacherSql" />
+  	from t_teacher as t
+  	join t_college as c
+  	on t.college_id = c.id
+  	<where>
+  		<if test="param2 != null and param2 != ''">
+	        (t.id like CONCAT ('%',#{param2},'%') )
+    		or (t.name like CONCAT ('%',#{param2},'%') )
+            or (sex like CONCAT ('%',#{param2},'%') )
+            or (c.name like CONCAT ('%',#{param2},'%') )
+  		</if>
+  	</where>
+  	<if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  <select id="selectTeacher" resultType="Teacher">
+  	select
+  	<include refid="baseTeacherSql" />
+  	from t_teacher
+  	where  id = #{id}
+  	and password = #{password}
+  </select>
+  
+  <select id="getTotalItemsCount" resultType="Integer">
+      select count(*)
+      from t_teacher as t
+      join t_college as c
+      on t.college_id = c.id
+      <where>
+          <if test="param2 != null and param2 != ''">
+              (t.id like CONCAT ('%',#{param2},'%') )
+              or (t.name like CONCAT ('%',#{param2},'%') )
+              or (sex like CONCAT ('%',#{param2},'%') )
+              or (c.name like CONCAT ('%',#{param2},'%') )
+          </if>
+      </where>
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_teacher
+    where id = #{id}
+  </delete>
+  
+  <delete id="deleteInList" >
+  	delete from t_teacher where id in
+  		<foreach collection="list" item="id" separator="," open="(" close=")">
+  			#{id}
+  		</foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="com.sms.entity.Teacher">
+    insert into t_teacher (id, password, name, sex, synopsis, college_id)
+    values (#{id}, #{password}, #{name}, #{sex}
+    	, #{synopsis}, #{collegeId}
+      )
+  </insert>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+  	insert into t_teacher (id, password, name, sex, synopsis, college_id
+      ) values 
+      <foreach collection="list" item="item" separator="," >
+  		(#{item.id}, #{item.password}, #{item.name}, #{item.sex}, #{item.synopsis}, #{item.collegeId})
+  	  </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.sms.entity.Teacher">
+    insert into t_teacher
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+        <if test="sex != null">
+            sex,
+        </if>
+      <if test="synopsis != null">
+        synopsis,
+      </if>
+        <if test="collegeId != null">
+            college_id,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="password != null">
+        #{password},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+        <if test="sex != null">
+            #{sex},
+        </if>
+      <if test="synopsis != null">
+        #{synopsis},
+      </if>
+        <if test="collegeId != null">
+            #{collegeId},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sms.entity.Teacher">
+    update t_teacher
+    <set>
+      <if test="password != null">
+        password = #{password},
+      </if>
+      <if test="name != null">
+        name = #{name},
+      </if>
+        <if test="sex != null">
+            sex = #{sex},
+        </if>
+      <if test="synopsis != null">
+      	synopsis = #{synopsis},
+      </if>
+        <if test="collegeId != null">
+            college_id = #{collegeId},
+        </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sms.entity.Teacher">
+    update t_teacher
+    set password = #{password},
+      name = #{name}, sex = #{sex}, synopsis = #{synopsis}, college_id = #{collegeId}
+    where id = #{id}
+  </update>
+</mapper>

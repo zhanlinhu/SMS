@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sms.dao.StudentDao">
+  <resultMap id="baseStudentMap" type="com.sms.entity.Student">
+    <id column="id" property="id" />
+    <result column="password" property="password" />
+    <result column="name" property="name" />
+    <result column="sex" property="sex" />
+    <result column="grade" property="grade" />
+    <result column="admission_date" property="admissionDate" />
+    <result column="graduation_date" property="graduationDate" />
+    <result column="academic_status" property="academicStatus" />
+    <result column="major_id" property="majorId"/>
+  </resultMap>
+
+    <resultMap id="studentMap" type="com.sms.dto.StudentVo">
+        <id column="id" property="id" />
+        <result column="password" property="password" />
+        <result column="name" property="name" />
+        <result column="sex" property="sex" />
+        <result column="major" property="major" />
+        <result column="grade" property="grade" />
+        <result column="admission_date" jdbcType="DATE" property="admissionDate" />
+        <result column="graduation_date" jdbcType="DATE" property="graduationDate" />
+        <result column="academic_status" property="academicStatus" />
+    </resultMap>
+  
+  <resultMap id="baseResultMap" type="com.sms.dto.StudentVo">
+    <id column="sId" property="id" />
+    <result column="sName" property="name" />
+    <result column="sex" property="sex" />
+    <result column="grade" property="grade" />
+    <result column="id" property="id" />
+    <result column="score" property="score" />
+    <result column="result" property="result" />
+  	<result column="cName" property="courseName" />
+  </resultMap>
+  
+    <sql id="baseStudentSql">
+        id, password, name, sex, , major_id, grade, admission_date, graduation_date, academic_status
+    </sql>
+
+    <sql id="studentSql">
+        S.id as id, password, S.name as name, sex, M.name as major, grade, admission_date, graduation_date, academic_status
+    </sql>
+  
+  <select id="getStudent" resultMap="baseStudentMap">
+  	select id, password, name, sex, grade, admission_date, graduation_date, academic_status, major_id
+  	from t_student where id = #{id}
+  	and password = #{password}
+  </select>
+  
+  <select id="getTotalItemsCountByTid" resultType="Integer">
+  	select count(*)
+    from t_student as A, t_score as B, t_course as C, t_base_course as BC
+    <where>
+    	A.id = B.s_id and C.id = B.c_id and C.base_course_id = BC.id and C.complete = 0 and C.t_id = #{param1}
+    	<if test="param2 != null and param2 != ''">
+            and C.id = #{param2}
+    	</if>
+    </where>
+  </select>
+  
+  <select id="getStudentListByTid" resultMap="baseResultMap">
+    select B.id as id, A.id as sId, A.name as sName, sex, grade,
+           score, result, C.id as baseCourseId, BC.name as cName
+    from t_student as A, t_score as B, t_course as C, t_base_course as BC
+    <where>
+        A.id = B.s_id and C.id = B.c_id and C.base_course_id = BC.id
+        and C.complete = 0
+        and C.t_id = #{param2}
+        <if test="param3 != null and param3 != '' ">
+  			and C.id = #{param3}
+    	</if>
+    </where>
+    <if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  <select id="getTotalItemsCount" resultType="Integer">
+  	select count(*)
+    from t_student as S
+      join t_major as M
+      on S.major_id = M.id
+    <where>
+    	<if test="_parameter != null and _parameter != ''">
+            (S.id like CONCAT ('%',#{param2},'%') )
+            or (S.name like CONCAT ('%',#{param2},'%') )
+            or (S.sex like CONCAT ('%',#{param2},'%') )
+            or (M.name like CONCAT ('%',#{param2},'%') )
+            or (grade like CONCAT ('%',#{param2},'%') )
+            or (academic_status like CONCAT ('%',#{param2},'%') )
+    	</if>
+    </where>
+  </select>
+  
+  <select id="selectBySearchKey" resultMap="studentMap">
+  	select S.id as id, password, S.name as name, sex, M.name as major,
+  	       grade, admission_date, graduation_date, academic_status
+  	from t_student as S
+  	join t_major as M
+  	on S.major_id = M.id
+  	<where>
+  		<if test="param2 != null and param2 != ''">
+	        (S.id like CONCAT ('%',#{param2},'%') )
+    		or (S.name like CONCAT ('%',#{param2},'%') )
+            or (S.sex like CONCAT ('%',#{param2},'%') )
+            or (M.name like CONCAT ('%',#{param2},'%') )
+	        or (grade like CONCAT ('%',#{param2},'%') )
+	        or (academic_status like CONCAT ('%',#{param2},'%') )
+  		</if>
+  	</where>
+  	<if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="baseStudentMap">
+    select 
+    <include refid="baseStudentSql" />
+    from t_student
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from t_student
+    where id = #{id}
+  </delete>
+  
+  <delete id="deleteInList" >
+  	delete from t_student where id in
+  		<foreach collection="list" item="id" separator="," open="(" close=")">
+  			#{id}
+  		</foreach>
+  </delete>
+  
+  <insert id="insert" parameterType="com.sms.entity.Student">
+    insert into t_student (id, password, name, 
+      sex, grade, admission_date, graduation_date, academic_status, major_id)
+    values (#{id}, #{password}, #{name},
+      #{sex},#{grade}, #{admissionDate},
+      #{graduationDate}, #{academicStatus}, #{majorId})
+  </insert>
+  	  
+  <insert id="insertBatch" parameterType="java.util.List">
+  	insert into t_student (id, password, name, 
+      sex, grade, admission_date,
+  	  graduation_date, academic_status, major_id) values
+      <foreach collection="list" item="item" separator="," >
+  	    (#{item.id}, #{item.password}, #{item.name},
+      	#{item.sex}, #{item.grade}, #{item.admissionDate},
+      	#{item.graduationDate}, #{item.academicStatus}, #{item.majorId})
+  	  </foreach>
+  </insert>
+  
+  <insert id="insertSelective" parameterType="com.sms.entity.Student">
+    insert into t_student
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="password != null">
+        password,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="sex != null">
+        sex,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+       <if test="admissionDate != null">
+           admission_date,
+       </if>
+      <if test="graduationDate != null">
+          graduation_date,
+      </if>
+        <if test="academicStatus != null">
+            academic_status,
+        </if>
+        <if test="majorId != null">
+            major_id
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="id != null">
+            #{id},
+        </if>
+        <if test="password != null">
+            #{password},
+        </if>
+        <if test="name != null">
+            #{name},
+        </if>
+        <if test="sex != null">
+            #{sex},
+        </if>
+        <if test="grade != null">
+            #{grade},
+        </if>
+        <if test="admissionDate != null">
+            #{admissionDate},
+        </if>
+        <if test="graduationDate != null">
+            #{graduationDate},
+        </if>
+        <if test="academicStatus != null">
+            #{academicStatus},
+        </if>
+        <if test="majorId != null">
+            #{majorId}
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sms.entity.Student">
+    update t_student
+        <set>
+          <if test="password != null">
+            password = #{password},
+          </if>
+          <if test="name != null">
+            name = #{name},
+          </if>
+          <if test="sex != null">
+            sex = #{sex},
+          </if>
+          <if test="grade != null">
+            grade = #{grade},
+          </if>
+          <if test="admissionDate != null">
+            admission_date = #{admissionDate},
+          </if>
+          <if test="graduationDate != null">
+            graduation_date = #{graduationDate},
+          </if>
+          <if test="academicStatus != null">
+            academic_status = #{academicStatus},
+          </if>
+          <if test="majorId != null">
+             major_id = #{majorId},
+          </if>
+        </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sms.entity.Student">
+    update t_student
+    set password = #{password},
+        name = #{name},
+        sex = #{sex},
+        grade = #{grade},
+        admission_date = #{admissionDate},
+        graduation_date = #{graduationDate},
+        academic_status = #{academicStatus},
+        major_id = #{majorId}
+    where id = #{id}
+  </update>
+</mapper>

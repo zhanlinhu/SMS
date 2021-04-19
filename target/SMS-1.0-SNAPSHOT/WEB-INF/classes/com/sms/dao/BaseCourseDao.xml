@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sms.dao.BaseCourseDao">
+  <resultMap id="baseCourseMap" type="com.sms.entity.BaseCourse">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" property="name" />
+    <result column="synopsis" property="synopsis" />
+    <result column="major_id" property="majorId" />
+  </resultMap>
+    <resultMap id="baseCourseDtoMap" type="com.sms.dto.BaseCourseDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="name" property="name" />
+        <result column="synopsis" property="synopsis" />
+        <result column="major_id" property="majorId" />
+        <result column="majorName" property="majorName" />
+    </resultMap>
+  <sql id="Base_Column_List">
+    id, name, synopsis, major_id
+  </sql>
+  
+  <select id="getBaseCourseForSelect" resultMap="baseCourseMap">
+  	select distinct B.id,B.name from t_base_course as B, t_major as M, t_teacher as T
+  	<where>
+        B.major_id = M.id and M.college_id = T.college_id
+  		<if test="_parameter != null and _parameter != ''">
+    		and T.name like CONCAT ('%',#{searchKey},'%')
+  		</if>
+  	</where>
+  </select>
+  <select id="getBaseCourse" resultMap="baseCourseDtoMap">
+  	select
+      B.id, B.name, B.synopsis, major_id, M.name as majorName
+  	from t_base_course as B, t_major as M
+  	<where>
+        B.major_id = M.id
+  		<if test="param2 != null and param2 != ''">
+            (B.name like CONCAT ('%',#{searchKey},'%'))
+            or (M.name like CONCAT ('%',#{searchKey},'%'))
+  		</if>
+  	</where>
+  	<if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  <select id="getTotalItemsCount" resultType="Integer">
+  	select count(*)
+    from t_base_course as B, t_Major as M
+    <where>
+        B.major_id = M.id
+    	<if test="_parameter != null and _parameter != ''">
+    		(B.name like CONCAT ('%',#{searchKey},'%'))
+            or (M.name like CONCAT ('%',#{searchKey},'%'))
+    	</if>
+    </where>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="baseCourseMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_base_course
+    where id = #{idId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_base_course
+    where id = #{idId}
+  </delete>
+  
+  <delete id="deleteInList" >
+  	delete from t_base_course where id in
+  		<foreach collection="list" item="id" separator="," open="(" close=")">
+  			#{id}
+  		</foreach>
+  </delete>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+  	insert into t_base_course (id, name, synopsis, major_id
+      ) values 
+      <foreach collection="list" item="item" separator="," >
+  		(#{item.id}, #{item.name}, #{item.synopsis}, #{item.majorId})
+  	  </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.sms.entity.BaseCourse">
+    insert into t_base_course (id, name, synopsis, major_id)
+    values (#{idId}, #{name}, #{synopsis}, #{majorId})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sms.entity.BaseCourse">
+    insert into t_base_course
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="synopsis != null">
+        synopsis,
+      </if>
+        <if test="majorId != null">
+            major_id
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{idId},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="synopsis != null">
+        #{synopsis},
+      </if>
+        <if test="majorId != null">
+            #{majorId}
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sms.entity.BaseCourse">
+    update t_base_course
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="synopsis != null">
+        synopsis = #{synopsis},
+      </if>
+        <if test="majorId != null">
+            major_id = #{majorId}
+        </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sms.entity.BaseCourse">
+    update t_base_course
+    set name = #{name}, synopsis = #{synopsis}, synopsis = #{synopsis}
+    where id = #{id}
+  </update>
+</mapper>

@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sms.dao.CollegeDao">
+  <resultMap id="collegeMap" type="com.sms.entity.College">
+      <id column="id" property="id" />
+      <result column="name" property="name" />
+      <result column="synopsis" property="synopsis" />
+  </resultMap>
+    <resultMap id="cascaderDtoMap" type="com.sms.dto.CascaderDto">
+        <id column="id" property="id" />
+        <result column="name" property="name" />
+    </resultMap>
+  <sql id="Base_Column_List">
+    id, name, synopsis
+  </sql>
+  
+  <select id="getCollegeForSelect" resultMap="collegeMap">
+  	select id,name from t_college 
+  	<where>
+  		<if test="_parameter != null and _parameter != ''">
+    		name like CONCAT ('%',#{searchKey},'%')
+  		</if>
+  	</where>
+  	limit 0, 10
+  </select>
+    <select id="getCascaderData" resultMap="cascaderDtoMap">
+        select id, name from t_college
+    </select>
+
+  <select id="getCollege" resultMap="collegeMap">
+  	select
+  	<include refid="Base_Column_List" />
+  	from t_college
+  	<where>
+  		<if test="param2 != null and param2 != ''">
+    		name like CONCAT ('%',#{param2},'%')
+  		</if>
+  	</where>
+  	<if test="param1 != null">
+  		limit #{param1.start}, #{param1.pageSize}
+  	</if>
+  </select>
+  
+  <select id="getTotalItemsCount" resultType="Integer">
+  	select count(*)
+    from t_college
+    <where>
+    	<if test="_parameter != null and _parameter != ''">
+    		name like CONCAT ('%',#{searchKey},'%')
+    	</if>
+    </where>
+  </select>
+  
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="collegeMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_college
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_college
+    where id = #{id}
+  </delete>
+  
+  <delete id="deleteInList" >
+  	delete from t_college where id in
+  		<foreach collection="list" item="id" separator="," open="(" close=")">
+  			#{id}
+  		</foreach>
+  </delete>
+  
+  <insert id="insertBatch" parameterType="java.util.List">
+  	insert into t_college (id, name, synopsis
+      ) values 
+      <foreach collection="list" item="item" separator="," >
+  		(#{item.id}, #{item.name}, #{item.synopsis})
+  	  </foreach>
+  </insert>
+  
+  <insert id="insert" parameterType="com.sms.entity.College">
+    insert into t_college (id, name, synopsis)
+    values (#{id}, #{name}, #{synopsis})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sms.entity.College">
+    insert into t_college
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="synopsis != null">
+        synopsis,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id},
+      </if>
+      <if test="name != null">
+        #{name},
+      </if>
+      <if test="synopsis != null">
+        #{synopsis},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sms.entity.College">
+    update t_college
+    <set>
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="synopsis != null">
+        synopsis = #{synopsis},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sms.entity.College">
+    update t_college
+    set name = #{name}, synopsis = #{synopsis}
+    where id = #{id}
+  </update>
+</mapper>

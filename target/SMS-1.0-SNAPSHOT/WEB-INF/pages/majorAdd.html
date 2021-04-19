@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="${s.base}/res/layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="${s.base}/res/css/public.css" media="all" />
+	<script type="text/javascript" src="${s.base}/res/layui/layui.js"></script>
+	<script type="text/javascript" src="${s.base}/res/js/majorAdd.js"></script>
+</head>
+<body class="childrenBody">
+	<form class="layui-form" style="width:80%;">
+	
+		<input type="hidden" id="id" value="">
+		<div class="layui-row">
+			<div class="magb15 layui-col-md4 layui-col-xs12">
+				<label class="layui-form-label">专业名称</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input name" lay-verify="required"
+						   placeholder="请输入专业名称">
+				</div>
+			</div>
+			<div id="collegeDiv" class="magb15 layui-col-md4 layui-col-xs12" lay-filter="teacherSelect">
+				<label class="layui-form-label">所属学院</label>
+				<div class="layui-input-block">
+					<select id="collegeSelect" name="collegeSelect" lay-verify="required" lay-filter="collegeSelect" lay-search>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div id="baseCourseDiv" class="magb15 layui-col-md4 layui-col-xs12">
+				<label class="layui-form-label">专业编号</label>
+				<div class="layui-input-block">
+					<input type="text" class="layui-input majorNum" lay-verify="majorNumVer"
+						   placeholder="请输入专业编号">
+				</div>
+			</div>
+		</div>
+
+		<div class="layui-form-item layui-row layui-col-xs12">
+			<label class="layui-form-label">简介</label>
+			<div class="layui-input-block">
+				<textarea id="synopsis" placeholder="请输入简介" class="layui-textarea"></textarea>
+			</div>
+		</div>
+		
+		<div class="layui-form-item layui-row layui-col-xs12">
+			<div class="layui-input-block">
+				<button class="layui-btn layui-btn-sm" id="addMajor" lay-submit lay-filter="addMajor">提交</button>
+				<button type="reset" id="reset"
+					class="layui-btn layui-btn-sm layui-btn-primary">重置</button>
+			</div>
+		</div>
+	</form>
+</body>
+</html>
