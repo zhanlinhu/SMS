@@ -24,7 +24,7 @@ layui.config({
 			data:{
 				admissionDate: $('#admissionDate').val(),
 				grade:$("#grade").val(),
-				academicStatus: cascader.getChooseData()[0],//学院id，临时用学业状态替代
+				graduationDate: cascader.getChooseData()[0],//学院id，临时用学业状态替代
 				name: $(".cascader-choose-active:eq(1)").text() //专业名称，临时用学生名称替代
 			},
 			success:function (rs){

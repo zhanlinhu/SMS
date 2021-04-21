@@ -19,23 +19,7 @@
 .icons li,.icons li:hover,.loginBody .iconfont,.loginBody .iconfont:hover,.loginBody .layui-form-item.layui-input-focus label,.loginBody .layui-form-item label,.loginBody .layui-form-item.layui-input-focus input,.loginBody .layui-form-item input{transition: all 0.3s ease-in-out;-webkit-transition: all 0.3s ease-in-out;}
 .childrenBody #content img{width: 30%; height: 30%}
 /*设置下拉框高度和表格单元格相同*/
-td .layui-form-select{
-    margin-top:-5px;
-    margin-left:-15px;
-    margin-right:-15px;
-}
-td .layui-form-select input{
-    text-align: center;
-}
-.layui-table-cell{
-    overflow:visible;
-}
-.layui-table-box{
-    overflow:visible;
-}
-.layui-table-body{
-    overflow:visible;
-}
+
 /*404页面*/
 .noFind{ text-align:center; padding-top:2%;}
 .noFind i{ line-height:1em; font-size:12em !important; color: #393D50; display:block;}

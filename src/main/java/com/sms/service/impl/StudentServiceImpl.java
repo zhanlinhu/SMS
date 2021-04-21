@@ -83,7 +83,7 @@ public class StudentServiceImpl implements StudentService, Login {
 			student.setGrade(String.valueOf(object.get(3)));
 			student.setAdmissionDate(String.valueOf(object.get(4)));
 			student.setGraduationDate(String.valueOf(object.get(5)));
-			student.setAcademicStatus(String.valueOf(object.get(6)));
+			student.setAcademicStatus((Integer) object.get(6));
 			student.setMajorId(Integer.valueOf(SIDUtil.majorList.get(object.get(7))));
 			student.setId(getAutoSid(student, (String) object.get(7),(String) object.get(8)));
 			listTemp.add(student);
@@ -139,7 +139,7 @@ public class StudentServiceImpl implements StudentService, Login {
 		}else{
 			//前端调用生成sid
 			majorNum = SIDUtil.majorNum.get(student.getName());
-			sid = student.getAdmissionDate().split("-")[0] + "" + student.getAcademicStatus() + majorNum + student.getGrade();
+			sid = student.getAdmissionDate().split("-")[0] + "" + student.getGraduationDate() + majorNum + student.getGrade();
 			count = studentDao.getTotalItemsCount(sid);
 			if(count == 0){
 				count = 1;

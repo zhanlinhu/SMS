@@ -29,7 +29,7 @@ public class AuthController extends BaseController{
 		page.setPageNum(curr);
 		List<Auth> list = authService.getAuthList(page, searchKey);
 
-		return success(list);
+		return success(list,page.getTotalItemsCount());
 	}
 	
 	@ResponseBody

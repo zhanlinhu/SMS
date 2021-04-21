@@ -104,7 +104,9 @@ public class MajorServiceImpl implements MajorService {
                     if (cascaderDto.getChildren() != null) {
                         cascaderDto.getChildren().add(dto);
                     } else {
-                        cascaderDto.setChildren(Arrays.asList(dto));
+                        //cascaderDto.setChildren(Arrays.asList(dto));
+                        cascaderDto.setChildren(new ArrayList<CascaderDto>());
+                        cascaderDto.getChildren().add(dto);
                     }
                 }
             }

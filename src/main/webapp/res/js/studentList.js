@@ -61,6 +61,13 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                         $(this).text("五班")
                     }
                 });
+                $("[data-field='academicStatus']").children().each(function(){
+                    if($(this).text()=='0'){
+                        $(this).text("在读")
+                    }else {
+                        $(this).text("毕业")
+                    }
+                });
 
                 //pageCurr=rs.count;
             }

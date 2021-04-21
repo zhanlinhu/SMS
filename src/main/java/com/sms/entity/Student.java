@@ -8,13 +8,13 @@ public class Student extends User{
     private String grade;//班级
     private String admissionDate;//入学日期
     private String graduationDate;//毕业时间
-    private String academicStatus;//学业状态
+    private Integer academicStatus;//学业状态
     private Integer majorId;//专业id
 
     public Student() {
     }
 
-    public Student(String id, String password, String name, String sex, String grade, String admissionDate, String graduationDate, String academicStatus, Integer majorId) {
+    public Student(String id, String password, String name, String sex, String grade, String admissionDate, String graduationDate, Integer academicStatus, Integer majorId) {
         this.id = id;
         this.password = password;
         this.name = name;
@@ -82,11 +82,11 @@ public class Student extends User{
         this.graduationDate = graduationDate;
     }
 
-    public String getAcademicStatus() {
+    public Integer getAcademicStatus() {
         return academicStatus;
     }
 
-    public void setAcademicStatus(String academicStatus) {
+    public void setAcademicStatus(Integer academicStatus) {
         this.academicStatus = academicStatus;
     }
 

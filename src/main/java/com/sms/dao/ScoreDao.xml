@@ -57,10 +57,10 @@
     	and C.start_date &lt;= #{endDate}
     </if>
    	<if test="isPass == 1">
-    	and (score >= 60 or result = 1)
+    	and (score >= 60 or result = "通过")
     </if>
     <if test="isPass == 2">
-    	and (60 > score or result = 0)
+    	and (60 > score or result = "未通过")
     </if>
     <if test="searchKey != null and searchKey != '' ">
     	and (
@@ -86,10 +86,10 @@
 	    	and C.start_date &lt;= #{param2.endDate}
 	    </if>
     	<if test="param2.isPass == 1">
-	    	and (score >= 60 or result = 1)
+	    	and (score >= 60 or result = "通过")
 	    </if>
 	    <if test="param2.isPass == 2">
-	    	and (60 > score or result = 0)
+	    	and (60 > score or result = "未通过")
 	    </if>
 	    <if test="param2.searchKey != null and param2.searchKey != '' ">
 	    	and (
