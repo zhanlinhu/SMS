@@ -57,11 +57,13 @@
 				</div>
 			</div>
 			<div class="magb15 layui-col-md4 layui-col-xs12">
-				<label class="layui-form-label">学院</label>
+				<label class="layui-form-label">专业</label>
 				<div class="layui-input-block">
-					<select name="college" lay-verify="required" lay-filter="college" id="college" lay-search>
-					</select>
+					<cascader id="major">
+						<input type="hidden" id="majorName" value="请选择" class="autoSid">
+					</cascader>
 				</div>
+			</div>
 		</div>
 		<div class="layui-form-item layui-row layui-col-xs12">
 			<label class="layui-form-label">简介</label>

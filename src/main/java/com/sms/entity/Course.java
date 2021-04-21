@@ -13,11 +13,12 @@ public class Course {
     private Integer choiceNum;//选课人数
     private String tId;//开课老师id
     private Integer baseCourseId;//基础课程id
+    private Integer majorId;//开课专业ID
 
     public Course() {
     }
 
-    public Course(Integer id, String startDate, String endDate, Integer classHour, String testMode, Integer studentNum, Integer complete, Integer choiceNum, String tId, Integer baseCourseId) {
+    public Course(Integer id, String startDate, String endDate, Integer classHour, String testMode, Integer studentNum, Integer complete, Integer choiceNum, String tId, Integer baseCourseId, Integer majorId) {
         this.id = id;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -28,6 +29,15 @@ public class Course {
         this.choiceNum = choiceNum;
         this.tId = tId;
         this.baseCourseId = baseCourseId;
+        this.majorId = majorId;
+    }
+
+    public Integer getMajorId() {
+        return majorId;
+    }
+
+    public void setMajorId(Integer majorId) {
+        this.majorId = majorId;
     }
 
     public Integer getId() {
@@ -94,19 +104,19 @@ public class Course {
         this.choiceNum = choiceNum;
     }
 
-    public String gettId() {
+    public String getTId() {
         return tId;
     }
 
-    public void settId(String tId) {
+    public void setTId(String tId) {
         this.tId = tId;
     }
 
-    public Integer getbaseCourseId() {
+    public Integer getBaseCourseId() {
         return baseCourseId;
     }
 
-    public void setbaseCourseId(Integer baseCourseId) {
+    public void setBaseCourseId(Integer baseCourseId) {
         this.baseCourseId = baseCourseId;
     }
 }

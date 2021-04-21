@@ -68,7 +68,7 @@ public class BaseCourseServiceImpl implements BaseCourseService {
 			BaseCourse course = new BaseCourse();
 			course.setName(String.valueOf(Object.get(0)));
 			course.setSynopsis(String.valueOf(Object.get(1)));
-			course.setMajorId(SIDUtil.majorList.get(Object.get(2)));
+			course.setCollegeId(SIDUtil.collegeNum.get(Object.get(2)));
 			list.add(course);
 		}
 		return baseCourseDao.insertBatch(list);

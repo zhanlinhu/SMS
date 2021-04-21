@@ -6,15 +6,15 @@ public class TeacherDto {
     private String name;//姓名
     private String sex;//性别
     private String synopsis;//简介
-    private String college;//所属学院
-    private String collegeId;//所属学院名
+    private String major;//所属学院
+    private String majorId;//所属学院名
 
-    public String getCollegeId() {
-        return collegeId;
+    public String getMajorId() {
+        return majorId;
     }
 
-    public void setCollegeId(String collegeId) {
-        this.collegeId = collegeId;
+    public void setMajorId(String majorId) {
+        this.majorId = majorId;
     }
 
     public String getId() {
@@ -57,11 +57,11 @@ public class TeacherDto {
         this.synopsis = synopsis;
     }
 
-    public String getCollege() {
-        return college;
+    public String getMajor() {
+        return major;
     }
 
-    public void setCollege(String college) {
-        this.college = college;
+    public void setMajor(String major) {
+        this.major = major;
     }
 }

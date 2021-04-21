@@ -4,8 +4,25 @@ public class BaseCourseDto {
     private Integer id;//编号
     private String name;//课程名
     private String synopsis;//课程简介
-    private Integer majorId;//专业id;
-    private String majorName;//专业名称
+    private String collegeName;//学院名
+    private String collegeId;//学院id
+
+
+    public String getCollegeName() {
+        return collegeName;
+    }
+
+    public void setCollegeName(String collegeName) {
+        this.collegeName = collegeName;
+    }
+
+    public String getCollegeId() {
+        return collegeId;
+    }
+
+    public void setCollegeId(String collegeId) {
+        this.collegeId = collegeId;
+    }
 
     public Integer getId() {
         return id;
@@ -31,19 +48,4 @@ public class BaseCourseDto {
         this.synopsis = synopsis;
     }
 
-    public Integer getMajorId() {
-        return majorId;
-    }
-
-    public void setMajorId(Integer majorId) {
-        this.majorId = majorId;
-    }
-
-    public String getMajorName() {
-        return majorName;
-    }
-
-    public void setMajorName(String majorName) {
-        this.majorName = majorName;
-    }
 }

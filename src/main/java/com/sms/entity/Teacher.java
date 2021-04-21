@@ -6,26 +6,26 @@ public class Teacher extends User{
     private String name;//姓名
     private String sex;//性别
     private String synopsis;//简介
-    private String collegeId;//所属学院
+    private Integer majorId;//所属学院
 
     public Teacher() {
     }
 
-    public Teacher(String id, String password, String name, String sex, String synopsis, String collegeId) {
+    public Teacher(String id, String password, String name, String sex, String synopsis, Integer majorId) {
         this.id = id;
         this.password = password;
         this.name = name;
         this.sex = sex;
         this.synopsis = synopsis;
-        this.collegeId = collegeId;
+        this.majorId = majorId;
     }
 
-    public String getCollegeId() {
-        return collegeId;
+    public Integer getMajorId() {
+        return majorId;
     }
 
-    public void setCollegeId(String collegeId) {
-        this.collegeId = collegeId;
+    public void setMajorId(Integer majorId) {
+        this.majorId = majorId;
     }
 
     public String getId() {

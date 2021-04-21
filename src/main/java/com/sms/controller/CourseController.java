@@ -133,7 +133,7 @@ public class CourseController extends BaseController{
 	public RepData<String> complete(Course course) {
 		int res = courseService.completeCourse(course);
 		if (res > 0)
-			return success("结课成功！");
+			return success(RESULT_TRUE);
 		return fail(OPRATION_ERROR);
 	}
 	

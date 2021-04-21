@@ -31,7 +31,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                 {field: 'id', title: '教职工号', sort:true, width:150, align:"center"},
                 {field: 'name', title: '姓名', width:150, align:'center'},
                 {field: 'sex', title: '性别', width:140, align:'center'},
-                {field: 'college', title: '所属学院', minWidth:310, align:'center'},
+                {field: 'major', title: '所属专业', minWidth:310, align:'center'},
                 {field: 'synopsis', title: '简介', align:'center'},
                 {title: '操作', width:220, templet:'#teacherListBar',fixed:"right",align:"center"}
             ]]

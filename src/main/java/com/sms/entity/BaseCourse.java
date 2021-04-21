@@ -4,24 +4,24 @@ public class BaseCourse {
     private Integer id;//编号
     private String name;//课程名
     private String synopsis;//课程简介
-    private Integer majorId;//专业id;
+    private String collegeId;//专业id;
 
     public BaseCourse() {
     }
 
-    public BaseCourse(Integer id, String name, String synopsis, Integer majorId) {
+    public BaseCourse(Integer id, String name, String synopsis, String collegeId) {
         this.id = id;
         this.name = name;
         this.synopsis = synopsis;
-        this.majorId = majorId;
+        this.collegeId = collegeId;
     }
 
-    public Integer getMajorId() {
-        return majorId;
+    public String getCollegeId() {
+        return collegeId;
     }
 
-    public void setMajorId(Integer majorId) {
-        this.majorId = majorId;
+    public void setCollegeId(String collegeId) {
+        this.collegeId = collegeId;
     }
 
     public Integer getId() {

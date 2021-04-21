@@ -77,7 +77,7 @@ public class TeacherServiceImpl implements TeacherService, Login{
 			t.setName(String.valueOf(Objectject.get(2)));
 			t.setSex(String.valueOf(Objectject.get(3)));
 			t.setSynopsis(String.valueOf(Objectject.get(4)));
-			t.setCollegeId(SIDUtil.collegeNum.get(Objectject.get(5)));
+			t.setMajorId(SIDUtil.majorList.get(Objectject.get(5)));
 			list.add(t);
 		}
 		return teacherDao.insertBatch(list);

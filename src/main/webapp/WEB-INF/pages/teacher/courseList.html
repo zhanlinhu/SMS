@@ -59,7 +59,7 @@ layui.use(['layer','table'],function(){
 				dataType: "json",
 	       		url: "/SMS/course/complete.html",
 	       		success:function(rs) {
-	       			if (rs.msg == true) {
+	       			if (rs.msg == "true") {
 	   					tableIns.reload();
 	   	                layer.close(index);
 	   				}else {

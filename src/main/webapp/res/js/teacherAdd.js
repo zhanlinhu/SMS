@@ -1,8 +1,57 @@
-layui.use(['form','layer'],function(){
+layui.config({
+	base: "/SMS/res/layui/lay/mymodules/ajaxCascader/",version: '1.6'
+}).use(['form','layer',"jquery","ajaxCascader"],function(){
     var form = layui.form,
         layer = parent.layer === undefined ? layui.layer : top.layer,
 		// element = layui.element,
-        $ = layui.jquery;
+        $ = layui.jquery,
+		cascader = layui.ajaxCascader;
+
+
+	//专业级联选择器
+	cascader.load({
+
+		elem: "#major",
+		placeholder: $("#majorName").val(),
+		//data: data,
+		// type: "post",
+		// triggerType: "change",
+		showLastLevels: true,
+		search: {
+			show: true,
+			// minLabel: 1,
+			// placeholder: '请输入搜索词'
+		},
+		showlast:true,                           //【可选】是否只显示最后一级 【默认：false】
+		clicklast:true,			      //【可选】点击最后一级才选择数据
+		disabled:false,                           //【可选】是否禁用当前组件
+		clear:true,                               // 【1.6新增】【可选】是否显示清空功能
+		getChildren:function(value,callback) {
+			var data = {};
+			$.ajax({
+				url: "/SMS/major/getCascader.html",
+				type: 'get',
+				dataType: "json",
+				success: function (res) {
+					data = res.data;
+					for (var i in data) {
+						data[i].value = data[i].id;
+						data[i].label = data[i].name;
+						delete data[i].id;
+						delete data[i].name;
+						for(let j in data[i].children){
+							data[i].children[j].value = data[i].children[j].id;
+							data[i].children[j].label = data[i].children[j].name;
+							delete data[i].children[j].id;
+							delete data[i].children[j].name;
+						}
+						data[i].hasChild = true;
+					}
+					callback(data);
+				}
+			})
+		}
+	});
 
 
 	function loadTeacher(date){
@@ -45,7 +94,7 @@ layui.use(['form','layer'],function(){
 	            name : $(".name").val(),
 				sex : $("input[type='radio']:checked").val(),
 	            password : pwd,
-				collegeId : $("#college").val(),
+				majorId : cascader.getChooseData()[1],
 	            synopsis : $("#synopsis").val()
 			},
 			dataType: "json",

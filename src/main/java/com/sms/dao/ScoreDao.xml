@@ -48,7 +48,7 @@
   <select id="getTotalItemsCountForExport" parameterType="com.sms.dto.ScoreVo"  resultType="java.lang.Integer">
     select count(*)
     from t_score as Sc, t_course as C, t_student as Stu, t_base_course as Bc, t_teacher as T, t_major as M
-    where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Bc.major_id = M.id
+    where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Stu.major_id = M.id
     and C.t_id = T.id and C.complete = 1
    	<if test="startDate != null and startDate != '' ">
     	and C.start_date >= #{startDate}
@@ -60,13 +60,12 @@
     	and (score >= 60 or result = "通过")
     </if>
     <if test="isPass == 2">
-    	and (60 > score or result = "未通过")
+    	and (60 &lt; score or result = "未通过")
     </if>
     <if test="searchKey != null and searchKey != '' ">
     	and (
-			Stu.major like CONCAT('%', #{searchKey}, '%')
-			or Stu.grade like CONCAT('%', #{searchKey}, '%')
-			
+    	    Stu.id like CONCAT('%', #{searchKey}, '%')
+			or M.name like CONCAT('%', #{searchKey}, '%')
 			or Bc.name like CONCAT('%', #{searchKey}, '%')
 		)
     </if>
@@ -76,7 +75,7 @@
       select distinct start_date, Stu.id as stuId, Stu.name as stuName, M.name as majorName, grade,
       Bc.name as courseName, T.name as teacherName, test_mode, score, result
       from t_score as Sc, t_course as C, t_student as Stu, t_base_course as Bc, t_teacher as T, t_major as M
-      where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Bc.major_id = M.id
+      where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Stu.major_id = M.id
       and C.t_id = T.id and C.complete = 1
     <if test="param2 != null">
     	<if test="param2.startDate != null and param2.startDate != '' ">
@@ -89,14 +88,14 @@
 	    	and (score >= 60 or result = "通过")
 	    </if>
 	    <if test="param2.isPass == 2">
-	    	and (60 > score or result = "未通过")
+	    	and (60 &lt; score or result = "未通过")
 	    </if>
 	    <if test="param2.searchKey != null and param2.searchKey != '' ">
-	    	and (
-				M.name like CONCAT('%', #{param2.searchKey}, '%')
-				or Stu.grade like CONCAT('%', #{param2.searchKey}, '%')
-				or Bc.name like CONCAT('%', #{param2.searchKey}, '%')
-			)
+            and (
+                Stu.id like CONCAT('%', #{param2.searchKey}, '%')
+            or M.name like CONCAT('%', #{param2.searchKey}, '%')
+            or Bc.name like CONCAT('%', #{param2.searchKey}, '%')
+            )
 	    </if>
     </if>
     <if test="param1 != null">

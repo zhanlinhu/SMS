@@ -68,7 +68,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
             {type: "checkbox", fixed:"left", width:50},
             {field: 'id', title: '课程编号', sort:true, minWidth:80, align:"left"},
             {field: 'name', title: '课程名',minWidth:120, align:'left'},
-            {field: 'majorName', title: '所属专业', minWidth:100, align:'left'},
+            {field: 'collegeName', title: '所属学院', minWidth:100, align:'left'},
             {field: 'synopsis', title: '课程简介', minWidth:100, align:'left'},
             {title: '操作', width:160, templet:'#courseListBar',fixed:"right",align:"center"}
         ]]
@@ -146,6 +146,8 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                     body.find("#classHour").val(edit.classHour);
                     body.find("#testMode").val(edit.testMode);
                     body.find("#studentNum").val(edit.studentNum);
+                    select.html("<option id='defaultMajorId' value='"+edit.majorId+"' >"+edit.majorName+"</option>");
+                    body.find("#synopsis").val(edit.synopsis);
                     //body.find("#baseCourseSelect").val(edit.baseCourseId).attr("checked","checked");
                     //.find("#teacherSelect").val(edit.tId).attr("checked","checked");
                     body.find('#reset').attr("disabled","disabled").addClass("layui-disabled");
@@ -179,8 +181,8 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                 if(edit){
                     body.find("#id").val(edit.id);
                     body.find("#name").val(edit.name);
-                    var select = body.find("#majorSelect");
-                    select.html("<option id='defaultMajorId' value='"+edit.majorId+"' >"+edit.majorName+"</option>");
+                    var select = body.find("#collegeSelect");
+                    select.html("<option id='defaultCollegeId' value='"+edit.collegeId+"' >"+edit.collegeName+"</option>");
                     body.find("#synopsis").val(edit.synopsis);
                     body.find('#reset').attr("disabled","disabled").addClass("layui-disabled");
                     form.render();
