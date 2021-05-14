@@ -48,8 +48,8 @@
     	C.base_course_id = B.id and C.t_id = T.id and start_date > CURRENT_DATE 
     	<if test="searchKey != null and searchKey != '' ">
     	and(
-	        (B.name like CONCAT ('%',#{param2},'%') )
-    		or (T.name like CONCAT ('%',#{param2},'%') )
+	        (B.name like CONCAT ('%',#{searchKey},'%') )
+    		or (T.name like CONCAT ('%',#{searchKey},'%') )
 	     )
     	</if>
     	and C.complete = 0 and C.major_id = #{majorId}

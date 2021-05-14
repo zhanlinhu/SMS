@@ -2,7 +2,7 @@ package com.sms.dto;
 
 import com.sms.entity.Course;
 
-public class ScoreVo extends Course{
+public class ScoreDto extends Course{
 	
 	private String stuId;
 	private String stuName;

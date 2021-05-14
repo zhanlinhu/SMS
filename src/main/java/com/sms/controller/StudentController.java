@@ -1,15 +1,12 @@
 package com.sms.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.sms.dto.StudentVo;
+import com.sms.dto.StudentDto;
 import com.sms.entity.Student;
 import com.sms.entity.Teacher;
 import com.sms.service.StudentService;
 import com.sms.utils.MD5Util;
 import com.sms.utils.RepData;
-import com.sms.utils.SIDUtil;
 import com.sms.utils.page.Pagination;
-import org.apache.poi.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -36,9 +30,9 @@ public class StudentController extends BaseController{
 	
 	@ResponseBody
 	@RequestMapping(value="/list")
-	public RepData<List<StudentVo>> getStudentList(@RequestParam(defaultValue="0")int curr,
-										  @RequestParam(defaultValue="20")int nums,
-										  @RequestParam(defaultValue="")String searchKey) {
+	public RepData<List<StudentDto>> getStudentList(@RequestParam(defaultValue="0")int curr,
+													@RequestParam(defaultValue="20")int nums,
+													@RequestParam(defaultValue="")String searchKey) {
 		
 		Pagination<Student> page = new Pagination<Student>();
 		
@@ -46,7 +40,7 @@ public class StudentController extends BaseController{
 		page.setPageSize(nums);
 		page.setPageNum(curr);
 		
-		List<StudentVo> list = studentService.getStudentList(page,searchKey);
+		List<StudentDto> list = studentService.getStudentList(page,searchKey);
 
 		return success(list,page.getTotalItemsCount());
 	}
@@ -58,17 +52,17 @@ public class StudentController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/stulist")
-	public RepData<List<StudentVo>> getMyStudentList(@RequestParam(defaultValue="0")int curr,
-			@RequestParam(defaultValue="20")int nums,
-			@RequestParam(required=false) Integer baseCourseId, HttpSession session) {
+	public RepData<List<StudentDto>> getMyStudentList(@RequestParam(defaultValue="0")int curr,
+													  @RequestParam(defaultValue="20")int nums,
+													  @RequestParam(required=false) Integer baseCourseId, HttpSession session) {
 		Teacher t = (Teacher) session.getAttribute(USER);
-		Pagination<StudentVo> page = new Pagination<StudentVo>();
+		Pagination<StudentDto> page = new Pagination<StudentDto>();
 		
 		page.setTotalItemsCount(studentService.getTotalItemsCountByTid(t.getId(), baseCourseId));
 		page.setPageSize(nums);
 		page.setPageNum(curr);
 		
-		List<StudentVo> list = studentService.getStudentListByTid(page, t.getId(), baseCourseId);
+		List<StudentDto> list = studentService.getStudentListByTid(page, t.getId(), baseCourseId);
 
 		return success(list,page.getTotalItemsCount());
 	}
@@ -90,7 +84,6 @@ public class StudentController extends BaseController{
 	@RequestMapping(value="/add")
 	public RepData<String> addStudent(@RequestParam(defaultValue="2") int opType, Student stu) {
 		int res = 0;
-		//stu.setGrade(SIDUtil.returnGrade(stu.getGrade()));
 		if (opType == 0) {
 			try {
 				stu.setPassword(stu.getPassword().toUpperCase());

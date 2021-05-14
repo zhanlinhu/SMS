@@ -5,39 +5,31 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="name" property="name" />
     <result column="synopsis" property="synopsis" />
-    <result column="major_id" property="majorId" />
+    <result column="college_id" property="collegeId" />
   </resultMap>
     <resultMap id="baseCourseDtoMap" type="com.sms.dto.BaseCourseDto">
         <id column="id" jdbcType="INTEGER" property="id" />
         <result column="name" property="name" />
         <result column="synopsis" property="synopsis" />
-        <result column="major_id" property="majorId" />
-        <result column="majorName" property="majorName" />
+        <result column="college_id" property="collegeId" />
+        <result column="collegeName" property="collegeName" />
     </resultMap>
   <sql id="Base_Column_List">
-    id, name, synopsis, major_id
+    id, name, synopsis, college_id
   </sql>
   
   <select id="getBaseCourseForSelect" resultMap="baseCourseMap">
-  	select distinct B.id,B.name from t_base_course as B, t_major as M, t_teacher as T
-  	<where>
-        B.major_id = M.id and M.college_id = T.college_id
-  		<if test="_parameter != null and _parameter != ''">
-    		and T.name like CONCAT ('%',#{searchKey},'%')
-  		</if>
-  	</where>
+  	select id,name from t_base_course
   </select>
+
+
   <select id="getBaseCourse" resultMap="baseCourseDtoMap">
-  	select
-      B.id, B.name, B.synopsis, major_id, M.name as majorName
-  	from t_base_course as B, t_major as M
-  	<where>
-        B.major_id = M.id
+  	select BC.id, BC.name, BC.synopsis, college_id, C.name as collegeName
+  	from t_base_course as BC, t_college as C where BC.college_id = C.id
   		<if test="param2 != null and param2 != ''">
-            (B.name like CONCAT ('%',#{searchKey},'%'))
-            or (M.name like CONCAT ('%',#{searchKey},'%'))
+            and (BC.name like CONCAT ('%',#{param2},'%'))
+            or (C.name like CONCAT ('%',#{param2},'%'))
   		</if>
-  	</where>
   	<if test="param1 != null">
   		limit #{param1.start}, #{param1.pageSize}
   	</if>
@@ -45,25 +37,23 @@
   
   <select id="getTotalItemsCount" resultType="Integer">
   	select count(*)
-    from t_base_course as B, t_Major as M
-    <where>
-        B.major_id = M.id
+    from t_base_course as BC, t_college as C
+    where BC.college_id = C.id
     	<if test="_parameter != null and _parameter != ''">
-    		(B.name like CONCAT ('%',#{searchKey},'%'))
-            or (M.name like CONCAT ('%',#{searchKey},'%'))
+    		and (BC.name like CONCAT ('%',#{searchKey},'%'))
+            or (C.name like CONCAT ('%',#{searchKey},'%'))
     	</if>
-    </where>
   </select>
   
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="baseCourseMap">
     select 
     <include refid="Base_Column_List" />
     from t_base_course
-    where id = #{idId}
+    where id = #{id}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_base_course
-    where id = #{idId}
+    where id = #{id}
   </delete>
   
   <delete id="deleteInList" >
@@ -74,16 +64,16 @@
   </delete>
   
   <insert id="insertBatch" parameterType="java.util.List">
-  	insert into t_base_course (id, name, synopsis, major_id
+  	insert into t_base_course (id, name, synopsis, college_id
       ) values 
       <foreach collection="list" item="item" separator="," >
-  		(#{item.id}, #{item.name}, #{item.synopsis}, #{item.majorId})
+  		(#{item.id}, #{item.name}, #{item.synopsis}, #{item.collegeId})
   	  </foreach>
   </insert>
   
   <insert id="insert" parameterType="com.sms.entity.BaseCourse">
-    insert into t_base_course (id, name, synopsis, major_id)
-    values (#{idId}, #{name}, #{synopsis}, #{majorId})
+    insert into t_base_course (id, name, synopsis, college_id)
+    values (#{id}, #{name}, #{synopsis}, #{collegeId})
   </insert>
   <insert id="insertSelective" parameterType="com.sms.entity.BaseCourse">
     insert into t_base_course
@@ -97,13 +87,13 @@
       <if test="synopsis != null">
         synopsis,
       </if>
-        <if test="majorId != null">
-            major_id
+        <if test="collegeId != null">
+        college_id
         </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{idId},
+        #{id},
       </if>
       <if test="name != null">
         #{name},
@@ -111,8 +101,8 @@
       <if test="synopsis != null">
         #{synopsis},
       </if>
-        <if test="majorId != null">
-            #{majorId}
+        <if test="collegeId != null">
+            #{collegeId}
         </if>
     </trim>
   </insert>
@@ -125,15 +115,15 @@
       <if test="synopsis != null">
         synopsis = #{synopsis},
       </if>
-        <if test="majorId != null">
-            major_id = #{majorId}
+        <if test="collegeId != null">
+            college_id = #{collegeId}
         </if>
     </set>
     where id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sms.entity.BaseCourse">
     update t_base_course
-    set name = #{name}, synopsis = #{synopsis}, synopsis = #{synopsis}
+    set name = #{name}, synopsis = #{synopsis}, college_id = #{collegeId}
     where id = #{id}
   </update>
 </mapper>

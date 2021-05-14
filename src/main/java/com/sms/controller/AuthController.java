@@ -40,7 +40,6 @@ public class AuthController extends BaseController{
 		} else {
 			auth.setStudentAuth(val);
 		}
-		System.out.println(auth.toString());
 		if (authService.update(auth) > 0)
 			return success(RESULT_TRUE);
 		return fail(OPRATION_ERROR);

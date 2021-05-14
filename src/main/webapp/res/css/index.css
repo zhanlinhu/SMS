@@ -44,12 +44,14 @@ iframe{ position:absolute; height:100%; width:100%; border:none;}
 
 /*选项卡*/
 .layui-body{overflow:hidden; border-top:5px solid #1AA094;border-left:2px solid #1AA094; background:#fff;}
+.layui-layout-admin .layui-body{bottom: 0px;}
 #top_tabs_box{ padding-right:138px; height:36px; border-bottom:1px solid #e2e2e2; }
 #top_tabs{ position: absolute; border-bottom:none;}
 .layui-tab-title .layui-this{ background-color:#5fb878; color:#fff; }
 .layui-tab-title .layui-this:after{ border:none; }
 .layui-tab-title li cite{ font-style: normal; padding-left:5px; }
 .clildFrame.layui-tab-content{ top:41px; position:absolute; bottom:0; width:100%; padding:0;}
+
 
 /*页面操作下拉*/
 .closeBox{ position:absolute; right:0; background-color:#fff !important; color:#000; border-left:1px solid #e2e2e2; border-bottom:1px solid #e2e2e2; }
@@ -62,7 +64,7 @@ iframe{ position:absolute; height:100%; width:100%; border:none;}
 .closeBox a span.layui-nav-more.layui-nav-mored{ border-color:transparent transparent #333;}
 
 /*底部*/
-.footer{ text-align: center; line-height:44px;border-left: 2px solid #1AA094; z-index:999;}
+/*.footer{ text-align: center; line-height:44px;border-left: 2px solid #1AA094; z-index:999;}*/
 
 /*修改顶部高度*/
 .header .layui-nav-child,.layui-body,.layui-layout-admin .layui-side,.header .layui-nav-bar{ top:50px !important;}

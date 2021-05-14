@@ -7,7 +7,7 @@
     <result column="name" property="name" />
       <result column="sex" property="sex" />
       <result column="synopsis" property="synopsis" />
-      <result column="college_id" property="collegeId" />
+      <result column="major_id" property="majorId" />
   </resultMap>
     <resultMap id="teacherDtoMap" type="com.sms.dto.TeacherDto">
         <id column="id" property="id" />
@@ -15,14 +15,14 @@
         <result column="name" property="name" />
         <result column="sex" property="sex" />
         <result column="synopsis" property="synopsis" />
-        <result column="college" property="college" />
-        <result column="collegeId" property="collegeId" />
+        <result column="major" property="major" />
+        <result column="majorId" property="majorId" />
     </resultMap>
   <sql id="baseTeacherSql">
-    id, password, name, sex, synopsis, college_id
+    id, password, name, sex, synopsis, major_id
   </sql>
     <sql id="teacherSql">
-        t.id as id, password, t.name as name, sex, t.synopsis as synopsis, c.name as college, c.id as collegeId
+        T.id as id, password, T.name as name, sex, T.synopsis as synopsis, M.name as major, M.id as majorId
     </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="teacherMap">
     select 
@@ -32,26 +32,24 @@
   </select>
   
   <select id="getTeacherForSelect" resultMap="teacherMap">
-  	select distinct T.id,T.name from t_base_course as B, t_major as M, t_teacher as T
-  	<where>
-        B.major_id = M.id and M.college_id = T.college_id
+  	select distinct T.id,T.name from t_base_course as B,t_college as C,t_teacher as T,t_major as M
+    where  B.college_id = C.id and C.id = M.college_id and M.id = T.major_id
   		<if test="_parameter != null and _parameter != ''">
     		and B.name like CONCAT ('%',#{searchKey},'%')
   		</if>
-  	</where>
   </select>
   <select id="getTeacher" resultMap="teacherDtoMap">
   	select
   	<include refid="teacherSql" />
-  	from t_teacher as t
-  	join t_college as c
-  	on t.college_id = c.id
+  	from t_teacher as T
+  	join t_major as M
+  	on T.major_id = M.id
   	<where>
   		<if test="param2 != null and param2 != ''">
-	        (t.id like CONCAT ('%',#{param2},'%') )
-    		or (t.name like CONCAT ('%',#{param2},'%') )
+	        (T.id like CONCAT ('%',#{param2},'%') )
+    		or (T.name like CONCAT ('%',#{param2},'%') )
             or (sex like CONCAT ('%',#{param2},'%') )
-            or (c.name like CONCAT ('%',#{param2},'%') )
+            or (M.name like CONCAT ('%',#{param2},'%') )
   		</if>
   	</where>
   	<if test="param1 != null">
@@ -70,14 +68,14 @@
   <select id="getTotalItemsCount" resultType="Integer">
       select count(*)
       from t_teacher as t
-      join t_college as c
-      on t.college_id = c.id
+      join t_major as m
+      on t.major_id = m.id
       <where>
           <if test="param2 != null and param2 != ''">
               (t.id like CONCAT ('%',#{param2},'%') )
               or (t.name like CONCAT ('%',#{param2},'%') )
               or (sex like CONCAT ('%',#{param2},'%') )
-              or (c.name like CONCAT ('%',#{param2},'%') )
+              or (m.name like CONCAT ('%',#{param2},'%') )
           </if>
       </where>
   </select>
@@ -95,17 +93,17 @@
   </delete>
   
   <insert id="insert" parameterType="com.sms.entity.Teacher">
-    insert into t_teacher (id, password, name, sex, synopsis, college_id)
+    insert into t_teacher (id, password, name, sex, synopsis, major_id)
     values (#{id}, #{password}, #{name}, #{sex}
-    	, #{synopsis}, #{collegeId}
+    	, #{synopsis}, #{majorId}
       )
   </insert>
   
   <insert id="insertBatch" parameterType="java.util.List">
-  	insert into t_teacher (id, password, name, sex, synopsis, college_id
+  	insert into t_teacher (id, password, name, sex, synopsis, major_id
       ) values 
       <foreach collection="list" item="item" separator="," >
-  		(#{item.id}, #{item.password}, #{item.name}, #{item.sex}, #{item.synopsis}, #{item.collegeId})
+  		(#{item.id}, #{item.password}, #{item.name}, #{item.sex}, #{item.synopsis}, #{item.majorId})
   	  </foreach>
   </insert>
   
@@ -127,8 +125,8 @@
       <if test="synopsis != null">
         synopsis,
       </if>
-        <if test="collegeId != null">
-            college_id,
+        <if test="majorId != null">
+            major_id
         </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -147,8 +145,8 @@
       <if test="synopsis != null">
         #{synopsis},
       </if>
-        <if test="collegeId != null">
-            #{collegeId},
+        <if test="majorId != null">
+            #{majorId},
         </if>
     </trim>
   </insert>
@@ -167,8 +165,8 @@
       <if test="synopsis != null">
       	synopsis = #{synopsis},
       </if>
-        <if test="collegeId != null">
-            college_id = #{collegeId},
+        <if test="majorId != null">
+            major_id = #{majorId},
         </if>
     </set>
     where id = #{id}
@@ -176,7 +174,7 @@
   <update id="updateByPrimaryKey" parameterType="com.sms.entity.Teacher">
     update t_teacher
     set password = #{password},
-      name = #{name}, sex = #{sex}, synopsis = #{synopsis}, college_id = #{collegeId}
+      name = #{name}, sex = #{sex}, synopsis = #{synopsis}, major_id = #{majorId}
     where id = #{id}
   </update>
 </mapper>

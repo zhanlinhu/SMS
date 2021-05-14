@@ -13,7 +13,7 @@
     <result column="major_id" property="majorId"/>
   </resultMap>
 
-    <resultMap id="studentMap" type="com.sms.dto.StudentVo">
+    <resultMap id="studentMap" type="com.sms.dto.StudentDto">
         <id column="id" property="id" />
         <result column="password" property="password" />
         <result column="name" property="name" />
@@ -25,8 +25,8 @@
         <result column="academic_status" property="academicStatus" />
     </resultMap>
   
-  <resultMap id="baseResultMap" type="com.sms.dto.StudentVo">
-    <id column="sId" property="id" />
+  <resultMap id="baseResultMap" type="com.sms.dto.StudentDto">
+    <id column="sId" property="sId" />
     <result column="sName" property="name" />
     <result column="sex" property="sex" />
     <result column="grade" property="grade" />

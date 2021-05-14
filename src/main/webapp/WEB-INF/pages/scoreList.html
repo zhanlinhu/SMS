@@ -7,22 +7,22 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form">
-	<blockquote class="layui-elem-quote quoteBox">
+	<blockquote class="layui-elem-quote">
 		<form class="layui-form">
 			<div class="layui-inline">
-				<label class="layui-label">时间区间</label>
+				<label class="layui-form-label">时间区间</label>
 				<div class="layui-input-inline" style="width:100px">
 					<input type="text" value="" placeholder="请选择"
-						id="startDate" class="layui-input" >
+						id="startDate" class="layui-input" autocomplete="off">
 				</div>
 				-
 				<div class="layui-input-inline" style="width:100px">
 					<input type="text" value="" placeholder="请选择"
-						id="endDate" class="layui-input" >
+						id="endDate" class="layui-input" autocomplete="off">
 				</div>
 			</div>
 			<div class="layui-inline" style="margin-left:30px">
-				<label class="layui-label">结果</label>
+				<label class="layui-form-label">结果</label>
 				<div class="layui-input-inline" style="width:90px">
 					<select id="isPass" class="layui-input-inline">
 						<option value="0">全部</option>
@@ -78,7 +78,7 @@ layui.use(['form','layer','table','laytpl','laydate'],function(){
         },
         cellMinWidth : 95,
         page : true,
-        height : "full-125",
+        height : "full-100",
         limits : [10,20,50,100],
         limit : 10,
         loading : true,
@@ -92,17 +92,23 @@ layui.use(['form','layer','table','laytpl','laydate'],function(){
             {field: 'courseName', title: '课程名',minWidth:160},
             {field: 'teacherName', title: '任课教师',minWidth:120},
             {field: 'testMode', title: '考核方式', minWidth:100},
-            {field: 'score', title: '成绩', minWidth:100},
+            {field: 'score', title: '成绩', minWidth:50},
             {field: 'result', title: '结果', minWidth:100}
         ]],
 		done: function (rs) {
-		  $("[data-field='result']").children().each(function(){
-			  if($(this).text()=='0'){
-				  $(this).text("未通过")
-			  }else if($(this).text()=='1') {
-				  $(this).text("通过")
-			  }
-		  });
+			$("[data-field='grade']").children().each(function(){
+				if($(this).text()=='1'){
+					$(this).text("一班")
+				}else if($(this).text()=='2'){
+					$(this).text("二班")
+				}else if($(this).text()=='3'){
+					$(this).text("三班")
+				}else if($(this).text()=='4'){
+					$(this).text("四班")
+				}else if($(this).text()=='5'){
+					$(this).text("五班")
+				}
+			});
 		}
       });
     }

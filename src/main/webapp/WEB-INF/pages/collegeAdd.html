@@ -21,7 +21,7 @@
 			<div class="magb15 layui-col-md4 layui-col-xs12">
 				<label class="layui-form-label">学院编号</label>
 				<div class="layui-input-block">
-					<input id="id" value="" class="layui-input">
+					<input id="id" value="" class="layui-input" lay-verify="collegeNumVer">
 				</div>
 			</div>
 		</div>
@@ -48,6 +48,17 @@ layui.use(['form'],function(){
 	var form = layui.form,
 		layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery;
+
+	form.verify({
+		collegeNumVer: function(value) { //自定义lay-verify的昵称，value：表单的值
+			if (value < 0 || value > 99) {
+				return "学院编号为两位数字！";
+			}else if(value.length != 2){
+				return "学院编号为两位数字字符！";
+			}
+		}
+	});
+
 
 
 	form.on("submit(addCollege)",function(data){

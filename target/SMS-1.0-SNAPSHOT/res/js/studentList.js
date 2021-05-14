@@ -24,7 +24,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
             },
             cellMinWidth : 95,
             page : true,
-            height : "full-125",
+            height : "full-100",
             limits : [10,15,20,25],
             limit : 10,
             loading : true,
@@ -40,7 +40,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                 {field: 'academicStatus', title: '学业状态', minWidth:60, align:'center'},
                 {title: '操作', width:200, templet:'#studentListBar',fixed:"right",align:"center"}
             ]],
-            done: function(res){
+            done: function(rs){
                 //如果是异步请求数据方式，res即为你接口返回的信息。
                 //如果是直接赋值的方式，res即为：{data: [], count: 99} data为当前页数据、count为数据总长度
                 //console.log(res);
@@ -115,7 +115,6 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
         var index = layui.layer.open({
             title : title,
             type : 2,
-            //content : "/SMS/student/addPage.html",
             content : "/SMS/student/addPage.html",
             success : function(layero, index){
                 var body = layui.layer.getChildFrame('body', index);
@@ -129,7 +128,6 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                     body.find("#re_password").val("123456");
                     body.find("#re_password").attr("readonly","readonly").addClass("layui-disabled");
                     body.find(".sex input[value="+edit.sex+"]").prop("checked","checked");  //性别
-                    //body.find("#grade").val(edit.grade).prop("selected","selected");
                     body.find("#grade").val(edit.grade).attr("checked","checked");
                     body.find("#majorName").val(edit.major);
                     body.find("#admissionDate").val(edit.admissionDate);
@@ -238,7 +236,6 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
 
     //列表操作
     table.on('tool(studentList)', function(obj){
-    	//alert("DA");
         var layEvent = obj.event,
             data = obj.data;
         if(layEvent === 'edit'){ //编辑

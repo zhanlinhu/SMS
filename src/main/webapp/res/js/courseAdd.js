@@ -56,7 +56,6 @@ layui.use(['form','layer','laydate'],function(){
 	}
 	loadMajor($("#defaultMajorId").val());
 
-	var inputObj2 = $("#teacherDiv").find("input");
 	function loadTeacher(date) {
 		inputObj1 = $("#baseCourseDiv").find("input");//重新获取
 		var searchKey = inputObj1.val();

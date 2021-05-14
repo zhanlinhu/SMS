@@ -1,6 +1,6 @@
 package com.sms.dao;
 
-import com.sms.dto.StudentVo;
+import com.sms.dto.StudentDto;
 import com.sms.entity.Student;
 import com.sms.utils.page.Pagination;
 
@@ -19,7 +19,7 @@ public interface StudentDao {
 
     int updateByPrimaryKey(Student record);
 
-	List<StudentVo> selectBySearchKey(Pagination<Student> page, String searchKey);
+	List<StudentDto> selectBySearchKey(Pagination<Student> page, String searchKey);
 
 	int getTotalItemsCount(String searchKey);
 
@@ -31,6 +31,6 @@ public interface StudentDao {
 
 	int getTotalItemsCountByTid(String id, Integer baseCourseId);
 
-	List<StudentVo> getStudentListByTid(Pagination<StudentVo> page, String id,
-			Integer baseCourseId);
+	List<StudentDto> getStudentListByTid(Pagination<StudentDto> page, String id,
+                                         Integer baseCourseId);
 }

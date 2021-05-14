@@ -73,7 +73,7 @@
   
   <insert id="insert" parameterType="com.sms.entity.BaseCourse">
     insert into t_base_course (id, name, synopsis, college_id)
-    values (#{idId}, #{name}, #{synopsis}, #{collegeId})
+    values (#{id}, #{name}, #{synopsis}, #{collegeId})
   </insert>
   <insert id="insertSelective" parameterType="com.sms.entity.BaseCourse">
     insert into t_base_course
@@ -88,7 +88,7 @@
         synopsis,
       </if>
         <if test="collegeId != null">
-            college_id
+        college_id
         </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -102,7 +102,7 @@
         #{synopsis},
       </if>
         <if test="collegeId != null">
-            #{college_id}
+            #{collegeId}
         </if>
     </trim>
   </insert>

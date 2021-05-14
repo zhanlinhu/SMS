@@ -45,9 +45,9 @@
   	<where>
   	    M.college_id = C.id
   		<if test="param2 != null and param2 != ''">
-            (major_num like CONCAT ('%',#{param2},'%'))
+            and (major_num like CONCAT ('%',#{param2},'%')
             or (M.name like CONCAT ('%',#{param2},'%') )
-            or (c.name like CONCAT ('%',#{param2},'%') )
+            or (c.name like CONCAT ('%',#{param2},'%') ))
   		</if>
   	</where>
   	<if test="param1 != null">
@@ -61,9 +61,9 @@
     <where>
         M.college_id = C.id
     	<if test="_parameter != null and _parameter != ''">
-            (major_num like CONCAT ('%',#{param2},'%'))
+            and (major_num like CONCAT ('%',#{param2},'%')
             or (M.name like CONCAT ('%',#{param2},'%'))
-            or (c.name like CONCAT ('%',#{param2},'%'))
+            or (c.name like CONCAT ('%',#{param2},'%')))
     	</if>
     </where>
   </select>

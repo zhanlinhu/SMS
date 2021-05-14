@@ -19,7 +19,7 @@
   </resultMap>
   
   
-  <resultMap id="ResultMap" type="com.sms.dto.ScoreVo">
+  <resultMap id="ResultMap" type="com.sms.dto.ScoreDto">
     <result column="start_date" jdbcType="DATE" property="startDate" />
     <result column="stuId" property="stuId" />
     <result column="stuName" property="stuName" />
@@ -45,7 +45,7 @@
   </select>
   
   <!-- 成绩报表 start-->
-  <select id="getTotalItemsCountForExport" parameterType="com.sms.dto.ScoreVo"  resultType="java.lang.Integer">
+  <select id="getTotalItemsCountForExport" parameterType="com.sms.dto.ScoreDto" resultType="java.lang.Integer">
     select count(*)
     from t_score as Sc, t_course as C, t_student as Stu, t_base_course as Bc, t_teacher as T, t_major as M
     where Sc.c_id = C.id and Sc.s_id = Stu.id and C.base_course_id = Bc.id and Stu.major_id = M.id
@@ -117,7 +117,7 @@
     </if>
   </select>
   
-  <select id="getCourseList"  resultMap="BaseResultMap">
+  <select id="getMyScoreList"  resultMap="BaseResultMap">
     select start_date, BC.name as courseName, 
     	T.name as teacherName, test_mode, 
     	score, result

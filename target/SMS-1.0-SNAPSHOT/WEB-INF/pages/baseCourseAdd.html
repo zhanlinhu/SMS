@@ -20,9 +20,9 @@
 		</div>
 		<div class="layui-row">
 			<div class="magb15 layui-col-md4 layui-col-xs12">
-				<label class="layui-form-label">所属专业</label>
+				<label class="layui-form-label">所属院系</label>
 				<div class="layui-input-block">
-					<select id="majorSelect" name="majorSelect" lay-verify="required" lay-filter="majorSelect" lay-search>
+					<select id="collegeSelect" name="collegeSelect" lay-verify="required" lay-filter="collegeSelect" lay-search>
 					</select>
 				</div>
 			</div>
@@ -56,7 +56,7 @@ layui.use(['form'],function(){
 	function loadTeacher(date){
 		$.ajax({
 			type: "post",
-			url: '/SMS/major/listForSelect.html',
+			url: '/SMS/college/listForSelect.html',
 			data:{},
 			dataType: "json",
 			success: function (rs) {
@@ -66,14 +66,14 @@ layui.use(['form'],function(){
 					$.each(list, function (i, n) {
 						s = s + '<option value="' + n.id + '">' + n.name + '</option>';
 					});
-					$("#majorSelect").html(s);
-					$("#majorSelect").val(date).attr("checked","checked");
+					$("#collegeSelect").html(s);
+					$("#collegeSelect").val(date).attr("checked","checked");
 					form.render('select');
 				}
 			}
 		});
 	}
-	loadTeacher($("#defaultMajorId").val());
+	loadTeacher($("#defaultCollegeId").val());
 
 	form.on("submit(addBaseCourse)",function(data){
         var index = top.layer.msg('数据提交中，请稍候',{icon: 16,time:false,shade:0.8});
@@ -85,7 +85,7 @@ layui.use(['form'],function(){
 				id : id,
 	            name : $("#name").val(),
 	            synopsis : $("#synopsis").val(),
-				majorId:$("#majorSelect").val()
+				collegeId:$("#collegeSelect").val()
 			},
 			dataType: "json",
 			timeout:2000,

@@ -21,7 +21,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
             },
             cellMinWidth : 95,
             page : true,
-            height : "full-125",
+            height : "full-100",
             limits : [10,15,20,25],
             limit : 10,
             loading : true,

@@ -1,7 +1,7 @@
 package com.sms.service;
 
-import com.sms.dto.ScoreVo;
-import com.sms.entity.Course;
+import com.sms.dto.CourseDto;
+import com.sms.dto.ScoreDto;
 import com.sms.entity.Score;
 import com.sms.utils.page.Pagination;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -22,12 +22,12 @@ public interface ScoreService {
 
 	int getTotalItemsCount(String string, String result);
 
-	List<Course> getCourseList(Pagination<Course> page, String string, String result);
+	List<CourseDto> getMyScoreList(Pagination<CourseDto> page, String string, String result);
 
-	int getTotalItemsCount(ScoreVo scoreVo);
+	int getTotalItemsCount(ScoreDto scoreDto);
 
-	List<ScoreVo> getScoreList(Pagination<ScoreVo> page, ScoreVo scoreVo);
+	List<ScoreDto> getScoreList(Pagination<ScoreDto> page, ScoreDto scoreDto);
 
-	XSSFWorkbook exportExcelInfo(ScoreVo scoreVo) throws InvocationTargetException, ClassNotFoundException, IntrospectionException, IllegalAccessException;
+	XSSFWorkbook exportExcelInfo(ScoreDto scoreDto) throws InvocationTargetException, ClassNotFoundException, IntrospectionException, IllegalAccessException;
 
 }

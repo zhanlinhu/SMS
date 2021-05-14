@@ -4,7 +4,7 @@ import com.alibaba.fastjson.annotation.JSONField;
 
 import java.util.Date;
 
-public class StudentVo {
+public class StudentDto {
     private String id;//学号|课号
 
     private String password;//密码
@@ -129,7 +129,7 @@ public class StudentVo {
 
     @Override
     public String toString() {
-        return "StudentVo{" +
+        return "StudentDto{" +
                 "id='" + id + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +

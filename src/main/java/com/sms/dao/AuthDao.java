@@ -8,10 +8,7 @@ import java.util.List;
 public interface AuthDao {
 	
 	List<Auth> selectUrl(String userType);
-	
-	List<Auth> selectMenu(String userType);
-	
-	
+
     int deleteByPrimaryKey(Integer id);
 
     int insert(Auth record);

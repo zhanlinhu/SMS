@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sms.dao.AuthDao">
   <resultMap id="BaseResultMap" type="com.sms.entity.Auth">
-    <id column="id" jdbcType="INTEGER" property="id" />
+    <id column="id" property="id" />
     <result column="name" property="name" />
     <result column="url" property="url" />
-    <result column="admin_auth" jdbcType="TINYINT" property="adminAuth" />
-    <result column="teacher_auth" jdbcType="TINYINT" property="teacherAuth" />
-    <result column="student_auth" jdbcType="TINYINT" property="studentAuth" />
+    <result column="admin_auth" property="adminAuth" />
+    <result column="teacher_auth" property="teacherAuth" />
+    <result column="student_auth"  property="studentAuth" />
   </resultMap>
   <sql id="Base_Column_List">
     id, name, url, admin_auth, teacher_auth, student_auth
@@ -54,39 +54,16 @@
     </choose>
   </select>
   
-  <select id="selectMenu" resultMap="BaseResultMap">
-    select name, url from t_auth where name is not null and
-    <choose>
-    	<when test="_parameter == 'admin'">
-    		admin_auth = 1
-    	</when>
-    	<when test="_parameter == 'teacher'">
-    		teacher_auth = 1
-    	</when>
-    	<when test="_parameter == 'student'">
-    		student_auth = 1
-    	</when>
-    	<otherwise>
-    		1 = 0
-    	</otherwise>
-    </choose>
-  </select>
-  
-  
-  
-  
-  
-  
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_auth
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id}
   </delete>
   <insert id="insert" parameterType="com.sms.entity.Auth">
     insert into t_auth (id, name, url, 
       admin_auth, teacher_auth, student_auth
       )
-    values (#{id,jdbcType=INTEGER}, #{name}, #{url},
-      #{adminAuth,jdbcType=TINYINT}, #{teacherAuth,jdbcType=TINYINT}, #{studentAuth,jdbcType=TINYINT}
+    values (#{id}, #{name}, #{url},
+      #{adminAuth}, #{teacherAuth}, #{studentAuth}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.sms.entity.Auth">
@@ -113,7 +90,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
-        #{id,jdbcType=INTEGER},
+        #{id},
       </if>
       <if test="name != null">
         #{name},
@@ -122,13 +99,13 @@
         #{url},
       </if>
       <if test="adminAuth != null">
-        #{adminAuth,jdbcType=TINYINT},
+        #{adminAuth},
       </if>
       <if test="teacherAuth != null">
-        #{teacherAuth,jdbcType=TINYINT},
+        #{teacherAuth},
       </if>
       <if test="studentAuth != null">
-        #{studentAuth,jdbcType=TINYINT},
+        #{studentAuth},
       </if>
     </trim>
   </insert>
@@ -142,24 +119,24 @@
         url = #{url},
       </if>
       <if test="adminAuth != null">
-        admin_auth = #{adminAuth,jdbcType=TINYINT},
+        admin_auth = #{adminAuth},
       </if>
       <if test="teacherAuth != null">
-        teacher_auth = #{teacherAuth,jdbcType=TINYINT},
+        teacher_auth = #{teacherAuth},
       </if>
       <if test="studentAuth != null">
-        student_auth = #{studentAuth,jdbcType=TINYINT},
+        student_auth = #{studentAuth},
       </if>
     </set>
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.sms.entity.Auth">
     update t_auth
     set name = #{name},
       url = #{url},
-      admin_auth = #{adminAuth,jdbcType=TINYINT},
-      teacher_auth = #{teacherAuth,jdbcType=TINYINT},
-      student_auth = #{studentAuth,jdbcType=TINYINT}
-    where id = #{id,jdbcType=INTEGER}
+      admin_auth = #{adminAuth},
+      teacher_auth = #{teacherAuth},
+      student_auth = #{studentAuth}
+    where id = #{id}
   </update>
 </mapper>

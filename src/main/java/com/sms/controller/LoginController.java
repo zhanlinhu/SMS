@@ -68,12 +68,10 @@ public class LoginController extends BaseController {
 		User user = loginUser.loginValidate(username, password.toUpperCase());//获得验证后user对象
 		
 		if (user != null) {
-			
-			//List<Auth> menuList = authService.getMenuList(user.getUserType());
+
 			List<Auth> urlList = authService.getUrlList(user.getUserType());
 			
 			user.setUrlList(urlList);
-			//user.setMenuList(menuList);
 			
 			session.setAttribute(USER, user);
 			System.out.println(success(user));

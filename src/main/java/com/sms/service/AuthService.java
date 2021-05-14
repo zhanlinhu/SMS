@@ -8,8 +8,6 @@ import java.util.List;
 
 public interface AuthService {
 
-	List<Auth> getMenuList(String userType);
-
 	List<Auth> getUrlList(String userType);
 
 	int getTotalItemsCount(String searchKey);

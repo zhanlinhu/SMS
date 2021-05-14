@@ -1,6 +1,4 @@
-/*
-	@Description: 点击对应按钮添加新窗口
-*/
+//点击按钮添加新窗口
 var tabFilter,menu=[],liIndex,curNav,delMenu,
     changeRefreshStr = window.sessionStorage.getItem("changeRefresh");
 layui.define(["element","jquery"],function(exports){
@@ -15,7 +13,7 @@ layui.define(["element","jquery"],function(exports){
 			};
 		};
     //生成左侧菜单
-    Tab.prototype.navBar = function(strData){
+    /*Tab.prototype.navBar = function(strData){
         var data;
         if(typeof(strData) == "string"){
             data = JSON.parse(strData); //部分用户解析出来的是字符串，转换一下
@@ -86,7 +84,7 @@ layui.define(["element","jquery"],function(exports){
 		$(window).resize(function(){
 			$(".navBar").height($(window).height()-210);
 		});
-	};
+	};*/
 
 	//是否点击窗口切换刷新页面
 	Tab.prototype.changeRegresh = function(index){
@@ -329,7 +327,7 @@ layui.define(["element","jquery"],function(exports){
 	});
 
 	//刷新当前
-	$(".refresh").on("click",function(){  //此处添加禁止连续点击刷新一是为了降低服务器压力，另外一个就是为了防止超快点击造成chrome本身的一些js文件的报错(不过貌似这个问题还是存在，不过概率小了很多)
+	$(".refresh").on("click",function(){
 		if($(this).hasClass("refreshThis")){
 			$(this).removeClass("refreshThis");
 			$(".clildFrame .layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload();

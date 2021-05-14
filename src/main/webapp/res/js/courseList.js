@@ -22,7 +22,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
         },
         cellMinWidth : 95,
         page : true,
-        height : "full-125",
+        height : "full-100",
         limits : [10,15,20,25],
         limit : 10,
         loading : true,
@@ -140,12 +140,14 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
                     var select = body.find("#teacherSelect");
                     select.html("<option id='defaultTeacher' value='"+edit.tId+"' >"+edit.teacherName+"</option>");
                     select = body.find("#baseCourseSelect");
+                    select = body.find("#baseCourseSelect");
                     select.html("<option id='defaultCourse' value='"+edit.baseCourseId+"' >"+edit.courseName+"</option>");
                     body.find("#startDate").val(edit.startDate);
                     body.find("#endDate").val(edit.endDate);
                     body.find("#classHour").val(edit.classHour);
                     body.find("#testMode").val(edit.testMode);
                     body.find("#studentNum").val(edit.studentNum);
+                    select = body.find("#majorSelect");
                     select.html("<option id='defaultMajorId' value='"+edit.majorId+"' >"+edit.majorName+"</option>");
                     body.find("#synopsis").val(edit.synopsis);
                     //body.find("#baseCourseSelect").val(edit.baseCourseId).attr("checked","checked");

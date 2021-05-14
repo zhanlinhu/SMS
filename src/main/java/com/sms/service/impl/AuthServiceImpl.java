@@ -16,12 +16,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Autowired
 	private AuthDao authDao;
-	
-	
-	@Override
-	public List<Auth> getMenuList(String userType) {
-		return authDao.selectMenu(userType);
-	}
+
 
 	@Override
 	public List<Auth> getUrlList(String userType) {

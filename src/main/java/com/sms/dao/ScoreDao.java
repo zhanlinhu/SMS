@@ -1,7 +1,7 @@
 package com.sms.dao;
 
-import com.sms.dto.ScoreVo;
-import com.sms.entity.Course;
+import com.sms.dto.CourseDto;
+import com.sms.dto.ScoreDto;
 import com.sms.entity.Score;
 import com.sms.utils.page.Pagination;
 
@@ -24,12 +24,12 @@ public interface ScoreDao {
 
 	int update(List<Score> scoreList);
 
-	List<Course> getCourseList(Pagination<Course> page, String id, String result);
+	List<CourseDto> getMyScoreList(Pagination<CourseDto> page, String id, String result);
 
 	int getTotalItemsCount(String id, String result);
 
-	int getTotalItemsCountForExport(ScoreVo scoreVo);
+	int getTotalItemsCountForExport(ScoreDto scoreDto);
 
-	List<ScoreVo> getScoreListForExport(Pagination<ScoreVo> page,
-			ScoreVo scoreVo);
+	List<ScoreDto> getScoreListForExport(Pagination<ScoreDto> page,
+                                         ScoreDto scoreDto);
 }

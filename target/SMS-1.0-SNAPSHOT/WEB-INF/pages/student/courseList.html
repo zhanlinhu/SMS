@@ -8,7 +8,7 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form">
-	<blockquote class="layui-elem-quote quoteBox">
+	<blockquote class="layui-elem-quote">
 		<form class="layui-form">
 			<div class="layui-inline">
 				<div class="layui-input-inline">
@@ -62,9 +62,9 @@ layui.use(['layer','table'],function(){
     var tableIns = null;
     var isAll = 1;
     loadChoiceList(isAll);
-    function loadChoiceList(date) {
+    function loadChoiceList(data) {
     	
-    	if (date == 1) {
+    	if (data == 1) {
     		colsArray[0][9] = {title: "操作", width:90, templet:"#courseListBar",fixed:"right",align:"center"};
     	} else {
     		colsArray[0][9] = {title: "操作", width:90, templet:"#courseListBar2",fixed:"right",align:"center"};
@@ -77,12 +77,12 @@ layui.use(['layer','table'],function(){
 	        	,limitName: "nums" //每页数据量的参数名
 	        },
 	        where: {
-	        	isAll: date,
+	        	isAll: data,
 	            searchKey: $(".searchVal").val()  //搜索的关键字
 	        },
 	        cellMinWidth : 95,
 	        page : true,
-	        height : "full-125",
+	        height : "full-100",
 	        limits : [10,15,20,25],
 	        limit : 10,
 	        loading : true,

@@ -32,31 +32,30 @@
 				<label class="layui-form-label">开始时间</label>
 				<div class="layui-input-block">
 					<input type="text" value="" placeholder="请选择开始时间"
-						id="startDate" class="layui-input" >
+						id="startDate" class="layui-input" autocomplete="off">
 				</div>
 			</div>
 			<div class="magb15 layui-col-md4 layui-col-xs12">
 				<label class="layui-form-label">结束时间</label>
 				<div class="layui-input-block">
 					<input type="text" value="" placeholder="请选择结束时间"
-						id="endDate" class="layui-input" >
+						id="endDate" class="layui-input" autocomplete="off">
 				</div>
 			</div>
 		</div>
 		
 		<div class="layui-row">
 			<div class="magb15 layui-col-md4 layui-col-xs12">
-				<label class="layui-form-label">课时</label>
+				<label class="layui-form-label">所属专业</label>
 				<div class="layui-input-block">
-					<input type="text" value="" placeholder="请输入课时"
-						id="classHour" class="layui-input" >
+					<select id="majorSelect" name="majorSelect" lay-verify="required" lay-filter="majorSelect" lay-search>
+					</select>
 				</div>
 			</div>
 			<div class="magb15 layui-col-md4 layui-col-xs12">
-				<label class="layui-form-label">考核方式</label>
+				<label class="layui-form-label">课时</label>
 				<div class="layui-input-block">
-					<input type="text" value="" placeholder="请输入考核方式"
-						id="testMode" class="layui-input" >
+					<input type="text" value="" placeholder="请输入课时" id="classHour" class="layui-input" >
 				</div>
 			</div>
 		</div>
@@ -67,6 +66,13 @@
 				<div class="layui-input-block">
 					<input type="text" value="" placeholder="请输入人数"
 						id="studentNum" class="layui-input" >
+				</div>
+			</div>
+			<div class="magb15 layui-col-md4 layui-col-xs12">
+				<label class="layui-form-label">考核方式</label>
+				<div class="layui-input-block">
+					<input type="text" value="" placeholder="请输入考核方式"
+						   id="testMode" class="layui-input" >
 				</div>
 			</div>
 		</div>

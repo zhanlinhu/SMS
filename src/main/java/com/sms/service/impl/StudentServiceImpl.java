@@ -1,7 +1,7 @@
 package com.sms.service.impl;
 
 import com.sms.dao.StudentDao;
-import com.sms.dto.StudentVo;
+import com.sms.dto.StudentDto;
 import com.sms.entity.Student;
 import com.sms.entity.User;
 import com.sms.service.Login;
@@ -17,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -35,8 +34,8 @@ public class StudentServiceImpl implements StudentService, Login {
 	}
 
 	@Override
-	public List<StudentVo> getStudentList(Pagination<Student> page,
-										  String searchKey) {
+	public List<StudentDto> getStudentList(Pagination<Student> page,
+                                           String searchKey) {
 		return studentDao.selectBySearchKey(page, searchKey);
 	}
 
@@ -121,8 +120,8 @@ public class StudentServiceImpl implements StudentService, Login {
 	}
 
 	@Override
-	public List<StudentVo> getStudentListByTid(Pagination<StudentVo> page,
-			String id, Integer baseCourseId) {
+	public List<StudentDto> getStudentListByTid(Pagination<StudentDto> page,
+                                                String id, Integer baseCourseId) {
 		return studentDao.getStudentListByTid(page, id, baseCourseId);
 	}
 

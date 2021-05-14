@@ -8,7 +8,7 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form">
-	<blockquote class="layui-elem-quote quoteBox">
+	<blockquote class="layui-elem-quote">
 		<form class="layui-form">
 			<div class="layui-inline" style="margin-left:40px">
 				<div class="layui-input-inline" >
@@ -73,7 +73,7 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
         id : "studentListTable",
         cols : [[
             {type: "checkbox", fixed:"left", width:50 },
-            {field: "id", title: "编号", sort:true, minWidth:150, align:"center"},
+            {field: "sId", title: "学号", sort:true, minWidth:150, align:"center"},
             {field: "name", title: "姓名",minWidth:120, align:"center"},
             {field: "sex", title: "性别", minWidth:60, align:"center"},
             {field: "grade", title: "班级", minWidth:150, align:"center"},
@@ -81,7 +81,22 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
             {field: "score", title: "成绩", edit: "text", minWidth:150, align:"center"},
             {field: "result", title: "结果", edit: "text",minWidth:150, align:"center"},
             {title: "操作", width:100, templet:"#studentListBar",fixed:"right",align:"center"}
-        ]]
+        ]],
+		done : function (rs){
+			$("[data-field='grade']").children().each(function(){
+				if($(this).text()=='1'){
+					$(this).text("一班")
+				}else if($(this).text()=='2'){
+					$(this).text("二班")
+				}else if($(this).text()=='3'){
+					$(this).text("三班")
+				}else if($(this).text()=='4'){
+					$(this).text("四班")
+				}else if($(this).text()=='5'){
+					$(this).text("五班")
+				}
+			});
+		}
     });
 
 

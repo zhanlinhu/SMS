@@ -1,8 +1,8 @@
 package com.sms.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.sms.dto.ScoreVo;
-import com.sms.entity.Course;
+import com.sms.dto.CourseDto;
+import com.sms.dto.ScoreDto;
 import com.sms.entity.Score;
 import com.sms.entity.Student;
 import com.sms.service.ScoreService;
@@ -34,21 +34,21 @@ public class ScoreController extends BaseController{
 	
 	@ResponseBody
 	@RequestMapping(value="/list")
-	public RepData<List<ScoreVo>> getScoreList(Integer curr, Integer nums, ScoreVo scoreVo) {
-		System.out.println(scoreVo);
-		Pagination<ScoreVo> page = new Pagination<ScoreVo>();
-		page.setTotalItemsCount(scoreService.getTotalItemsCount(scoreVo));
+	public RepData<List<ScoreDto>> getScoreList(Integer curr, Integer nums, ScoreDto scoreDto) {
+		System.out.println(scoreDto);
+		Pagination<ScoreDto> page = new Pagination<ScoreDto>();
+		page.setTotalItemsCount(scoreService.getTotalItemsCount(scoreDto));
 		page.setPageSize(nums);
 		page.setPageNum(curr);
 		
-		List<ScoreVo> list = scoreService.getScoreList(page, scoreVo);
+		List<ScoreDto> list = scoreService.getScoreList(page, scoreDto);
 
 		return success(list,page.getTotalItemsCount());
 	}
-	
+
 	@ResponseBody
 	@RequestMapping("/export")
-	public void export(HttpServletRequest request, HttpServletResponse response, ScoreVo scoreVo)
+	public void export(HttpServletRequest request, HttpServletResponse response, ScoreDto scoreDto)
 			throws ClassNotFoundException, IntrospectionException,
 			IllegalAccessException, ParseException, InvocationTargetException {
 			
@@ -62,7 +62,7 @@ public class ScoreController extends BaseController{
 		response.setDateHeader("Expires", 0);
 		XSSFWorkbook workbook = null;
 		// 导出Excel对象
-		workbook = scoreService.exportExcelInfo(scoreVo);
+		workbook = scoreService.exportExcelInfo(scoreDto);
 		OutputStream output;
 		try {
 			output = response.getOutputStream();
@@ -83,18 +83,18 @@ public class ScoreController extends BaseController{
 	 */
 	@ResponseBody
 	@RequestMapping(value="/stuScore")
-	public RepData<List<Course>> getScoreList(@RequestParam(defaultValue="0")int curr,
-			@RequestParam(defaultValue="20")int nums,
-			HttpSession session, String result) {
+	public RepData<List<CourseDto>> getMyScoreList(@RequestParam(defaultValue="0")int curr,
+												 @RequestParam(defaultValue="20")int nums,
+												 HttpSession session, String result) {
 		Student stu = (Student) session.getAttribute(USER);
 		
-		Pagination<Course> page = new Pagination<Course>();
+		Pagination<CourseDto> page = new Pagination<CourseDto>();
 		
 		page.setTotalItemsCount(scoreService.getTotalItemsCount(stu.getId(), result));
 		page.setPageSize(nums);
 		page.setPageNum(curr);
 		
-		List<Course> list = scoreService.getCourseList(page, stu.getId(), result);
+		List<CourseDto> list = scoreService.getMyScoreList(page, stu.getId(), result);
 
 		return success(list,page.getTotalItemsCount());
 	}

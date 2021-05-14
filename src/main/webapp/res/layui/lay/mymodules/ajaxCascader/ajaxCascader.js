@@ -10,9 +10,7 @@
  	// 私有方法，禁止外面调用的方法
  	function Private(){
  		//页面初始化默认值
- 		this.param = {   
- 			width: 220,
- 			height: 40,
+ 		this.param = {
  			prop: {
  				value: "value",
  				label: "label",

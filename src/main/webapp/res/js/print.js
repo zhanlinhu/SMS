@@ -6,4 +6,5 @@ function doPrint() {
     prnhtml = prnhtml.substring(0,prnhtml.indexOf(eprnstr));
     window.document.body.innerHTML = prnhtml;
     window.print();
+    window.document.body.innerHTML = bdhtml;
 }

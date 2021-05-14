@@ -34,7 +34,28 @@ layui.use(['form','layer','laydate'],function(){
       	});
     }
 
-	var inputObj2 = $("#teacherDiv").find("input");
+	function loadMajor(date){
+		$.ajax({
+			type: "post",
+			url: '/SMS/major/listForSelect.html',
+			data:{},
+			dataType: "json",
+			success: function (rs) {
+				if (rs.msg == "true") {
+					var list = rs.data;
+					var s = '';
+					$.each(list, function (i, n) {
+						s = s + '<option value="' + n.id + '">' + n.name + '</option>';
+					});
+					$("#majorSelect").html(s);
+					$("#majorSelect").val(date).attr("checked","checked");
+					form.render('select');
+				}
+			}
+		});
+	}
+	loadMajor($("#defaultMajorId").val());
+
 	function loadTeacher(date) {
 		inputObj1 = $("#baseCourseDiv").find("input");//重新获取
 		var searchKey = inputObj1.val();
@@ -83,7 +104,8 @@ layui.use(['form','layer','laydate'],function(){
 	            endDate: $("#endDate").val(),
 	            classHour: $("#classHour").val(),
 	            testMode : $("#testMode").val(),
-	            studentNum : $("#studentNum").val()
+	            studentNum : $("#studentNum").val(),
+				majorId:$("#majorSelect").val()
 			},
 			dataType: "json",
 			timeout:2000,

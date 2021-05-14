@@ -8,7 +8,7 @@
 <body class="childrenBody">
 <!--startprint-->
 <form class="layui-form">
-	<blockquote class="layui-elem-quote quoteBox">
+	<blockquote class="layui-elem-quote">
 		<form class="layui-form">
 			<div class="layui-inline">
 				<a id="all" class="search_btn layui-btn layui-btn-primary">全部</a>
@@ -24,9 +24,9 @@
 			</div>
 		</form>
 	</blockquote>
-	
-	<table id="courseList" lay-filter="courseList" ></table>
-	
+
+	<table id="scoreList" lay-filter="scoreList" ></table>
+
 </form>
 <!--endprint-->
 <script type="text/javascript" src="${s.base}/res/layui/layui.js"></script>
@@ -38,12 +38,12 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
         $ = layui.jquery,
         table = layui.table;
      
-    //courseList列表
+    //scoreList列表
     var tableIns = null;
     loadCourse();
     function loadCourse() {
       tableIns = table.render({
-        elem: "#courseList",
+        elem: "#scoreList",
         url : "/SMS/score/stuScore.html",
         request: {
         	pageName: 'curr' //页码的参数名称
@@ -54,11 +54,11 @@ layui.use(['form','layer','table','laytpl','upload'],function(){
         },
         cellMinWidth : 95,
         page : true,
-        height : "full-125",
+        height : "full-100",
         limits : [10,20,50,100],
         limit : 10,
         loading : true,
-        id : "courseListTable",
+        id : "scoreListTable",
         cols : [[
         	{field: 'startDate', title: '时间',minWidth:160, align:'center'},
             {field: 'courseName', title: '课程名',minWidth:160, align:'left'},

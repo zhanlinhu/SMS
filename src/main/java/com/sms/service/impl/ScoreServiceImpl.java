@@ -2,8 +2,9 @@ package com.sms.service.impl;
 
 import com.sms.dao.CourseDao;
 import com.sms.dao.ScoreDao;
+import com.sms.dto.CourseDto;
 import com.sms.dto.ExcelBean;
-import com.sms.dto.ScoreVo;
+import com.sms.dto.ScoreDto;
 import com.sms.entity.Course;
 import com.sms.entity.Score;
 import com.sms.service.ScoreService;
@@ -69,25 +70,25 @@ public class ScoreServiceImpl implements ScoreService {
 	}
 
 	@Override
-	public List<Course> getCourseList(Pagination<Course> page, String id,
-			String result) {
-		return scoreDao.getCourseList(page, id, result);
+	public List<CourseDto> getMyScoreList(Pagination<CourseDto> page, String id,
+										 String result) {
+		return scoreDao.getMyScoreList(page, id, result);
 	}
 
 	@Override
-	public int getTotalItemsCount(ScoreVo scoreVo) {
-		return scoreDao.getTotalItemsCountForExport(scoreVo);
+	public int getTotalItemsCount(ScoreDto scoreDto) {
+		return scoreDao.getTotalItemsCountForExport(scoreDto);
 	}
 
 	@Override
-	public List<ScoreVo> getScoreList(Pagination<ScoreVo> page, ScoreVo scoreVo) {
-		return scoreDao.getScoreListForExport(page, scoreVo);
+	public List<ScoreDto> getScoreList(Pagination<ScoreDto> page, ScoreDto scoreDto) {
+		return scoreDao.getScoreListForExport(page, scoreDto);
 	}
 
 	@Override
-	public XSSFWorkbook exportExcelInfo(ScoreVo scoreVo) throws InvocationTargetException, ClassNotFoundException, IntrospectionException, IllegalAccessException {  
+	public XSSFWorkbook exportExcelInfo(ScoreDto scoreDto) throws InvocationTargetException, ClassNotFoundException, IntrospectionException, IllegalAccessException {
 	    //根据条件查询数据，把数据装载到一个list中  
-	    List<ScoreVo> list = scoreDao.getScoreListForExport(null, scoreVo);
+	    List<ScoreDto> list = scoreDao.getScoreListForExport(null, scoreDto);
 	    List<ExcelBean> excel=new ArrayList<ExcelBean>();
 	    Map<Integer,List<ExcelBean>> map=new LinkedHashMap<Integer,List<ExcelBean>>();
 	    XSSFWorkbook xssfWorkbook=null;
@@ -104,7 +105,7 @@ public class ScoreServiceImpl implements ScoreService {
 	    excel.add(new ExcelBean("结果","result",0));  
 	    map.put(0, excel);
 	    //调用ExcelUtil的方法  
-	    xssfWorkbook = ExcelUtil.createExcelFile(ScoreVo.class, list, map, "sheet1");  
+	    xssfWorkbook = ExcelUtil.createExcelFile(ScoreDto.class, list, map, "sheet1");
 	    return xssfWorkbook;  
 	}
 }
