@@ -82,7 +82,9 @@ public class StudentServiceImpl implements StudentService, Login {
 			student.setGrade(String.valueOf(object.get(3)));
 			student.setAdmissionDate(String.valueOf(object.get(4)));
 			student.setGraduationDate(String.valueOf(object.get(5)));
-			student.setAcademicStatus((Integer) object.get(6));
+			System.out.println(object.get(6));
+			student.setAcademicStatus((Integer.valueOf((String)object.get(6))));
+			System.out.println(object.get(6));
 			student.setMajorId(Integer.valueOf(SIDUtil.majorList.get(object.get(7))));
 			student.setId(getAutoSid(student, (String) object.get(7),(String) object.get(8)));
 			listTemp.add(student);
