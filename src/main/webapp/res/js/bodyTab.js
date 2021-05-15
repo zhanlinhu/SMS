@@ -12,79 +12,6 @@ layui.define(["element","jquery"],function(exports){
 				url : undefined  //获取菜单json地址
 			};
 		};
-    //生成左侧菜单
-    /*Tab.prototype.navBar = function(strData){
-        var data;
-        if(typeof(strData) == "string"){
-            data = JSON.parse(strData); //部分用户解析出来的是字符串，转换一下
-        }else{
-            data = strData;
-        }
-        var ulHtml = '';
-        for(var i=0;i<data.length;i++){
-            if(data[i].spread || data[i].spread == undefined){
-                ulHtml += '<li class="layui-nav-item layui-nav-itemed">';
-            }else{
-                ulHtml += '<li class="layui-nav-item">';
-            }
-            if(data[i].children != undefined && data[i].children.length > 0){
-                ulHtml += '<a>';
-                if(data[i].icon != undefined && data[i].icon != ''){
-                    if(data[i].icon.indexOf("icon-") != -1){
-                        ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
-                    }else{
-                        ulHtml += '<i class="layui-icon" data-icon="'+data[i].icon+'">'+data[i].icon+'</i>';
-                    }
-                }
-                ulHtml += '<cite>'+data[i].title+'</cite>';
-                ulHtml += '<span class="layui-nav-more"></span>';
-                ulHtml += '</a>';
-                ulHtml += '<dl class="layui-nav-child">';
-                for(var j=0;j<data[i].children.length;j++){
-                    if(data[i].children[j].target == "_blank"){
-                        ulHtml += '<dd><a data-url="'+data[i].children[j].href+'" target="'+data[i].children[j].target+'">';
-                    }else{
-                        ulHtml += '<dd><a data-url="'+data[i].children[j].href+'">';
-                    }
-                    if(data[i].children[j].icon != undefined && data[i].children[j].icon != ''){
-                        if(data[i].children[j].icon.indexOf("icon-") != -1){
-                            ulHtml += '<i class="iconfont '+data[i].children[j].icon+'" data-icon="'+data[i].children[j].icon+'"></i>';
-                        }else{
-                            ulHtml += '<i class="layui-icon" data-icon="'+data[i].children[j].icon+'">'+data[i].children[j].icon+'</i>';
-                        }
-                    }
-                    ulHtml += '<cite>'+data[i].children[j].title+'</cite></a></dd>';
-                }
-                ulHtml += "</dl>";
-            }else{
-                if(data[i].target == "_blank"){
-                    ulHtml += '<a data-url="'+data[i].href+'" target="'+data[i].target+'">';
-                }else{
-                    ulHtml += '<a data-url="'+data[i].href+'">';
-                }
-                if(data[i].icon != undefined && data[i].icon != ''){
-                    if(data[i].icon.indexOf("icon-") != -1){
-                        ulHtml += '<i class="iconfont '+data[i].icon+'" data-icon="'+data[i].icon+'"></i>';
-                    }else{
-                        ulHtml += '<i class="layui-icon" data-icon="'+data[i].icon+'">'+data[i].icon+'</i>';
-                    }
-                }
-                ulHtml += '<cite>'+data[i].title+'</cite></a>';
-            }
-            ulHtml += '</li>';
-        }
-        return ulHtml;
-    };
-	//获取二级菜单数据
-	Tab.prototype.render = function() {
-		//显示左侧菜单
-		var _this = this;
-		$(".navBar ul").html('<li class="layui-nav-item layui-this"><a data-url="page/main.html"><i class="layui-icon" data-icon=""></i><cite>后台首页</cite></a></li>').append(_this.navBar(dataStr)).height($(window).height()-210);
-		element.init();  //初始化页面元素
-		$(window).resize(function(){
-			$(".navBar").height($(window).height()-210);
-		});
-	};*/
 
 	//是否点击窗口切换刷新页面
 	Tab.prototype.changeRegresh = function(index){
@@ -166,7 +93,6 @@ layui.define(["element","jquery"],function(exports){
 				window.sessionStorage.setItem("menu",JSON.stringify(menu)); //打开的窗口
 				window.sessionStorage.setItem("curmenu",JSON.stringify(curmenu));  //当前的窗口
 				element.tabChange(tabFilter, that.getLayId(_this.find("cite").text()));
-				that.tabMove(); //顶部窗口是否可滚动
 			}else{
 				//当前窗口内容
 				var curmenu = {
@@ -177,98 +103,8 @@ layui.define(["element","jquery"],function(exports){
                 that.changeRegresh(_this.parent('.layui-nav-item').index());
 				window.sessionStorage.setItem("curmenu", JSON.stringify(curmenu));  //当前的窗口
 				element.tabChange(tabFilter, that.getLayId(_this.find("cite").text()));
-				that.tabMove(); //顶部窗口是否可滚动
 			}
 		}
-	};
-
-	//顶部窗口移动
-	Tab.prototype.tabMove = function(){
-		$(window).on("resize",function(event){
-			var topTabsBox = $("#top_tabs_box"),
-				topTabsBoxWidth = $("#top_tabs_box").width(),
-				topTabs = $("#top_tabs"),
-				topTabsWidth = $("#top_tabs").width(),
-				tabLi = topTabs.find("li.layui-this"),
-				top_tabs = document.getElementById("top_tabs"),
-				event = event || window.event;
-
-			if(topTabsWidth > topTabsBoxWidth){
-				if(tabLi.position().left > topTabsBoxWidth || tabLi.position().left+topTabsBoxWidth > topTabsWidth){
-					topTabs.css("left",topTabsBoxWidth-topTabsWidth);
-				}else{
-					topTabs.css("left",-tabLi.position().left);
-				}
-				//拖动效果
-				var flag = false;
-				var cur = {
-				    x:0,
-				    y:0
-				};
-				var nx,dx,x ;
-				function down(event){
-				    flag = true;
-				    var touch ;
-				    if(event.touches){
-				        touch = event.touches[0];
-				    }else {
-				        touch = event;
-				    }
-				    cur.x = touch.clientX;
-				    dx = top_tabs.offsetLeft;
-				}
-				function move(event){
-                    if(flag){
-						window.getSelection ? window.getSelection().removeAllRanges() : document.selection.empty();
-				        var touch ;
-				        if(event.touches){
-				            touch = event.touches[0];
-				        }else {
-				            touch = event;
-				        }
-				        nx = touch.clientX - cur.x;
-				        x = dx+nx;
-				        if(x > 0){
-				        	x = 0;
-				        }else{
-				        	 if(x < topTabsBoxWidth-topTabsWidth){
-				        	 	x = topTabsBoxWidth-topTabsWidth;
-				        	 }else{
-				        	 	x = dx+nx;
-				        	 }
-				        }
-				        top_tabs.style.left = x +"px";
-				        //阻止页面的滑动默认事件
-				        document.addEventListener("touchmove",function(){
-				            event.preventDefault();
-				        },false);
-				    }
-				}
-				//鼠标释放时候的函数
-				function end(){
-				    flag = false;
-				}
-				//pc端拖动效果
-				topTabs.on("mousedown",down);
-				topTabs.on("mousemove",move);
-				$(document).on("mouseup",end);
-				//移动端拖动效果
-				topTabs.on("touchstart",down);
-				topTabs.on("touchmove",move);
-				topTabs.on("touchend",end);
-			}else{
-				//移除pc端拖动效果
-				topTabs.off("mousedown",down);
-				topTabs.off("mousemove",move);
-				topTabs.off("mouseup",end);
-				//移除移动端拖动效果
-				topTabs.off("touchstart",down);
-				topTabs.off("touchmove",move);
-				topTabs.off("touchend",end);
-				topTabs.removeAttr("style");
-				return false;
-			}
-		}).resize();
 	};
 
     //切换后获取当前窗口的内容
@@ -293,9 +129,6 @@ layui.define(["element","jquery"],function(exports){
 		}
 		element.tabChange(tabFilter,$(this).attr("lay-id")).init();
         bodyTab.changeRegresh($(this).index());
-		setTimeout(function(){
-			bodyTab.tabMove();
-		},100);
 	});
 
 	//删除tab
@@ -323,7 +156,6 @@ layui.define(["element","jquery"],function(exports){
             window.sessionStorage.setItem("menu", JSON.stringify(menu));
         }
 		element.tabDelete("bodyTab",$(this).parent("li").attr("lay-id")).init();
-		bodyTab.tabMove();
 	});
 
 	//刷新当前
@@ -331,9 +163,6 @@ layui.define(["element","jquery"],function(exports){
 		if($(this).hasClass("refreshThis")){
 			$(this).removeClass("refreshThis");
 			$(".clildFrame .layui-tab-item.layui-show").find("iframe")[0].contentWindow.location.reload();
-			setTimeout(function(){
-				$(".refresh").addClass("refreshThis");
-			},2000);
 		}else{
 			layer.msg("您点击的速度超过了服务器的响应速度，还是等两秒再刷新吧！");
 		}
@@ -367,8 +196,6 @@ layui.define(["element","jquery"],function(exports){
 		}else{
 			layer.msg("没有可以关闭的窗口了@_@");
 		}
-		//渲染顶部窗口
-		tab.tabMove();
 	});
 	//关闭全部
 	$(".closePageAll").on("click",function(){
@@ -384,8 +211,6 @@ layui.define(["element","jquery"],function(exports){
 		}else{
 			layer.msg("没有可以关闭的窗口了@_@");
 		}
-		//渲染顶部窗口
-		tab.tabMove();
 	});
 
 	var bodyTab = new Tab();
